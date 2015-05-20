@@ -11,18 +11,17 @@ namespace FakeService1
 {
     public class SocketClient : ISocketClient
     {
-        private int i;
-
         public SocketClient()
         {
-            var timer = new Timer(3000);
+            var timer = new Timer(1000);
             timer.Elapsed += (sender, args) =>
              {
                  Parse(null);
              };
-
             timer.Start();
         }
+
+        private int i;
 
         public event Action<IDataModel[]> DataReceived;
         public byte[] GetResponseBytes(bool isStopIntended)
@@ -32,7 +31,11 @@ namespace FakeService1
 
         public void Parse(byte[] bytes)
         {
-            DataReceived?.Invoke(new IDataModel[] { new DataModel() { I =i,II = i,III = i++} });
+            DataReceived?.Invoke(new IDataModel[]
+            {
+                new DataModel() { I =i,II = i,III = i++},
+                new DataModel() { I =i,II = i,III = i},
+            });
         }
     }
 }

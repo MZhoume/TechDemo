@@ -162,10 +162,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FakeService1\FakeService1.csproj">
-      <Project>{6f7f954a-7385-4638-9957-cb57bf2a9456}</Project>
-      <Name>FakeService1</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Interface\TechDemo.Interface.Client\TechDemo.Interface.Client.csproj">
       <Project>{4d161df4-ac47-4cbb-95b0-224ac2096cf1}</Project>
       <Name>TechDemo.Interface.Client</Name>

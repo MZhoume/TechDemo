@@ -54,7 +54,8 @@ namespace TechDemo.Client.ViewModel
 
                     if (objs.Length > DataModels.Count)
                     {
-                        for (int i = 0; i < objs.Length - DataModels.Count; i++)
+                        var count = objs.Length - DataModels.Count;
+                        for (int i = 0; i < count; i++)
                         {
                             DataModels.Add(new ObservableCollection<IDataModel>());
                             DisplayControls.Add(ServiceLocator.Current.GetInstance<IDisplayControl>(Guid.NewGuid().ToString()));
@@ -146,15 +147,15 @@ namespace TechDemo.Client.ViewModel
                                     byte[] b;
                                     while (_isMonitoring)
                                     {
+                                        b = _socketClient.GetResponseBytes(false);
+                                        socket.Send(b);
+
                                         while (socket.Available == 0)
                                         { }
 
                                         b = new byte[socket.Available];
                                         socket.Receive(b);
                                         _socketClient.Parse(b);
-                                        b = _socketClient.GetResponseBytes(false);
-
-                                        socket.Send(b);
                                     }
                                     b = _socketClient.GetResponseBytes(true);
 

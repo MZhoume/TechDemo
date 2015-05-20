@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TechDemo.Interface.Client;
 using TechDemo.Interface.Server;
@@ -17,6 +18,7 @@ namespace FakeService1
 
         public bool IsStopIntended(byte[] data)
         {
+            Thread.Sleep(500);
             return data[0] == 0xff;
         }
     }

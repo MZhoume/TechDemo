@@ -37,6 +37,9 @@ namespace TechDemo.Server.ViewModel
 
         private readonly List<IDataModel>[] _dataModels;
 
+        private readonly List<Socket> _clientsToDelete = new List<Socket>();
+        private readonly List<Socket> _clients = new List<Socket>();
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -72,6 +75,44 @@ namespace TechDemo.Server.ViewModel
             {
                 ServerLogs.Add($"Got new info at {DateTime.Now.ToLongTimeString()} from server {obj.ServerID}");
             });
+
+            if (_isListening)
+            {
+                foreach (var c in _clients)
+                {
+                    if (c.Available == 0)
+                    {
+                        continue;
+                    }
+                    var b = new byte[c.Available];
+                    c.Receive(b);
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    {
+                        ServerLogs.Add($"Received -- {b[0]}");
+                    });
+
+                    if (_socketServer.IsStopIntended(b))
+                    {
+                        DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                        {
+                            ServerLogs.Add("Ending...");
+                        });
+                        _clientsToDelete.Add(c);
+                        continue;
+                    }
+
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    {
+                        ServerLogs.Add($"Send -- {b[0]}");
+                    });
+                    c.Send(_socketServer.GenerateBytes(_dataModels.Select(d => d.Last()).ToArray()));
+                }
+
+                foreach (var c in _clientsToDelete)
+                {
+                    _clients.Remove(c);
+                }
+            }
         }
 
         private bool _isListening;
@@ -123,39 +164,7 @@ namespace TechDemo.Server.ViewModel
                                             try
                                             {
                                                 var c = _socket.Accept();
-                                                Task.Factory.StartNew(() =>
-                                                {
-                                                    using (c)
-                                                    {
-                                                        var b = new byte[5];
-                                                        while (_socket.Connected)
-                                                        {
-                                                            while (c.Available == 0)
-                                                            { }
-                                                            c.Receive(b);
-                                                            DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                                                            {
-                                                                ServerLogs.Add($"Received -- {b[0]}");
-                                                            });
-
-                                                            if (_socketServer.IsStopIntended(b))
-                                                            {
-
-                                                                DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                                                                {
-                                                                    ServerLogs.Add("Ending...");
-                                                                });
-                                                                break;
-                                                            }
-
-                                                            DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                                                            {
-                                                                ServerLogs.Add($"Send -- {b[0]}");
-                                                            });
-                                                            c.Send(_socketServer.GenerateBytes(_dataModels.Select(d => d.Last()).ToArray()));
-                                                        }
-                                                    }
-                                                });
+                                                _clients.Add(c);
                                             }
                                             catch (Exception ex)
                                             {
@@ -175,7 +184,7 @@ namespace TechDemo.Server.ViewModel
                             }
 
                             _isListening = !_isListening;
-                        }, () => 
+                        }, () =>
                         !(string.IsNullOrEmpty(_ipAddress) || string.IsNullOrEmpty(_port))));
             }
         }

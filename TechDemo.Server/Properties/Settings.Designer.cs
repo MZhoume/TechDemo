@@ -34,7 +34,7 @@ namespace TechDemo.Server.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("COM3,COM4,COM5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("COM3")]
         public string SerialPorts {
             get {
                 return ((string)(this["SerialPorts"]));

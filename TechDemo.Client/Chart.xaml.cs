@@ -36,6 +36,7 @@ namespace TechDemo.Client
         private string[] _keys;
         private int _time;
         private ObservableCollection<IDataModel> _list;
+        private LineGraph[] _graphs = new LineGraph[0];
 
         public Chart()
         {
@@ -44,6 +45,20 @@ namespace TechDemo.Client
 
         public void OnFragmentNavigation(FragmentNavigationEventArgs e)
         {
+            try
+            {
+                _list.CollectionChanged -= List_CollectionChanged;
+            }
+            catch
+            {
+                // ignored
+            }
+
+            foreach (var graph in _graphs)
+            {
+                plotter.Children.Remove(graph);
+            }
+
             var num = int.Parse(e.Fragment);
             _list = (Application.Current.Properties["DataModels"] as List<ObservableCollection<IDataModel>>)[num];
 
@@ -69,12 +84,14 @@ namespace TechDemo.Client
                 }
             }
 
+            _graphs = new LineGraph[_dataCount];
+
             for (int i = 0; i < _dataCount; i++)
             {
                 var i1 = i;
 
                 _points[i1] = new ObservableDataSource<Point>(points[i1]);
-                plotter.AddLineGraph(_points[i1], _keys[i1]);
+                _graphs[i1] = plotter.AddLineGraph(_points[i1], _keys[i1]);
             }
 
             plotter.FitToView();

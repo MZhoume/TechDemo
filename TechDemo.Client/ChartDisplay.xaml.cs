@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using FirstFloor.ModernUI.Presentation;
 using FirstFloor.ModernUI.Windows;
+using FirstFloor.ModernUI.Windows.Controls;
 using TechDemo.Interface.Client;
 using FragmentNavigationEventArgs = FirstFloor.ModernUI.Windows.Navigation.FragmentNavigationEventArgs;
 using NavigatingCancelEventArgs = FirstFloor.ModernUI.Windows.Navigation.NavigatingCancelEventArgs;
@@ -42,7 +43,9 @@ namespace TechDemo.Client
 
         public void OnNavigatedTo(NavigationEventArgs e)
         {
-            var count = (Application.Current.Properties["DataModels"] as List<ObservableCollection<IDataModel>>).Count;
+            modernTab.Layout = (TabLayout) Application.Current.Properties["Layout"];
+
+            var count = (Application.Current.Properties["DataModels"] as List<ObservableCollection<IDataModel>>)?.Count;
             for (int i = 0; i < count; i++)
             {
                 modernTab.Links.Add(new Link()
@@ -51,10 +54,16 @@ namespace TechDemo.Client
                     Source = new Uri($"/Chart.xaml#{i.ToString()}", UriKind.Relative)
                 });
             }
+
+            if (count>0)
+            {
+                modernTab.SelectedSource = new Uri($"/Chart.xaml#0", UriKind.Relative);
+            }
         }
 
         public void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
+            modernTab.Links.Clear();
         }
     }
 }
