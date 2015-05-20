@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using FirstFloor.ModernUI.Windows.Controls;
+using GalaSoft.MvvmLight.Messaging;
+using TechDemo.Interface.Client;
 
 namespace TechDemo.Client
 {
@@ -24,6 +26,11 @@ namespace TechDemo.Client
         public MainWindow()
         {
             InitializeComponent();
+
+            Messenger.Default.Register<GenericMessage<List<List<IDataModel>>>>(this, (msg) =>
+            {
+                Application.Current.Properties["DataModels"] = msg.Content;
+            });
         }
     }
 }

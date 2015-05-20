@@ -9,7 +9,7 @@
              d:DesignHeight="300" d:DesignWidth="300"
              DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Grid Style="{StaticResource ContentRoot}">
-        <mui:ModernTab SelectedSource="/Chart.xaml" Layout="Tab" x:Name="modernTab">
+        <mui:ModernTab x:Name="modernTab">
         </mui:ModernTab>
     </Grid>
 </UserControl>

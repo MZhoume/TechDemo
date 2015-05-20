@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace TechDemo.Interface.Client
 {
-    public interface IDataModel : INotifyPropertyChanged
+    public interface IDataModel
     {
         byte[] ToBytes();
 
         void Parse(byte[] bytes);
 
         int ServerID { get; set; }
+
+        Dictionary<string, double> ValuesToDraw { get; } 
     }
 }

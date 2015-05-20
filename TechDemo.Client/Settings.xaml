@@ -10,21 +10,22 @@
              DataContext="{Binding Main, Source={StaticResource Locator}}">
     <StackPanel>
         <DockPanel>
-            <StackPanel HorizontalAlignment="Center">
+            <StackPanel HorizontalAlignment="Center" Margin="5,0">
                 <TextBlock Style="{StaticResource Heading2}" x:Name="tbIPAddress" TextWrapping="Wrap" Text="IPAddress"/>
 
-                <TextBox x:Name="txtIPAddress" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Width="120" d:LayoutOverrides="LeftPosition, RightPosition, TopPosition, BottomPosition" Text="{Binding IPAddress}"/>
+                <TextBox x:Name="txtIPAddress" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Width="120" d:LayoutOverrides="LeftPosition, RightPosition, TopPosition, BottomPosition" Text="{Binding IPAddress, ValidatesOnDataErrors=True}"/>
             </StackPanel>
-            <StackPanel HorizontalAlignment="Center">
+            <StackPanel HorizontalAlignment="Center" Margin="5,0">
                 <TextBlock Style="{StaticResource Heading2}" x:Name="tbPort" TextWrapping="Wrap" Text="Port"/>
 
-                <TextBox x:Name="txtPort" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Width="120" d:LayoutOverrides="LeftPosition, RightPosition, TopPosition, BottomPosition" Text="{Binding Port}"/>
+                <TextBox x:Name="txtPort" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Width="120" d:LayoutOverrides="LeftPosition, RightPosition, TopPosition, BottomPosition" Text="{Binding Port, ValidatesOnDataErrors=True}"/>
 
             </StackPanel>
+            <Button x:Name="button" Content="{Binding ButtonString}" Width="75" Command="{Binding ToggleMonitoring, Mode=OneWay}"/>
         </DockPanel>
         <StackPanel d:LayoutOverrides="LeftPosition, RightPosition" Margin="0,5">
             <TextBlock Style="{StaticResource Heading2}" x:Name="tbStyle" TextWrapping="Wrap" Text="ChartViewLayout"/>
-            <ComboBox x:Name="comboBox" SelectedIndex="{Binding ChartDisplayStyleID}">
+            <ComboBox x:Name="comboBox" SelectedIndex="0" Selected="Selector_OnSelected">
                 <ComboBoxItem Content="Tab View"/>
                 <ComboBoxItem Content="List View"/>
             </ComboBox>

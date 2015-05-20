@@ -10,7 +10,6 @@ namespace FakeService2
 {
     public class DataModel : IDataModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
         public byte[] ToBytes()
         {
             throw new NotImplementedException();
@@ -22,5 +21,7 @@ namespace FakeService2
         }
 
         public int ServerID { get; set; }
+
+        public Dictionary<string, double> ValuesToDraw { get; }
     }
 }

@@ -10,13 +10,8 @@
              DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Grid Style="{StaticResource ContentRoot}">
         <ScrollViewer Margin="{StaticResource SplitLeft}">
-            <ListView x:Name="listView" ItemsSource="{Binding DisplayControls}" >
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+            <ListBox x:Name="listBox" ItemsSource="{Binding DisplayControls}" >
+            </ListBox>
         </ScrollViewer>
     </Grid>
 </UserControl>

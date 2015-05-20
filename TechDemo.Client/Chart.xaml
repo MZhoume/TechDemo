@@ -9,8 +9,7 @@
              mc:Ignorable="d" DataContext="{Binding Main, Source={StaticResource Locator}}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <d3:ChartPlotter >
-            <d3:LineGraph DataSource="{Binding ChartCollection}" x:Name="lineGraph" />
+        <d3:ChartPlotter x:Name="plotter">
         </d3:ChartPlotter>
     </Grid>
 </UserControl>

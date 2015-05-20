@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Messaging;
+using TechDemo.Interface.Client;
 
 namespace TechDemo.Client
 {
@@ -24,16 +25,6 @@ namespace TechDemo.Client
         public DataDisplay()
         {
             InitializeComponent();
-
-            Messenger.Default.Register<NotificationMessage<int>>("Init UI", (m) =>
-            {
-                // TODO: Init uis as data received and binding to viewmodel
-            });
-
-            Messenger.Default.Register<string>("Stopped", (m) =>
-            {
-                //TODO: clear all views
-            });
         }
     }
 }

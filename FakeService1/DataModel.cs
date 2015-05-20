@@ -22,8 +22,6 @@ namespace FakeService1
 
         public int III { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public byte[] ToBytes()
         {
             return new[] { i++, i, (byte)(i + 1) };
@@ -37,5 +35,13 @@ namespace FakeService1
         }
 
         public int ServerID { get; set; }
+
+        public Dictionary<string, double> ValuesToDraw => 
+            new Dictionary<string, double>()
+        {
+            ["I"]=I,
+            ["II"]=II,
+            ["III"]=III,
+        };
     }
 }

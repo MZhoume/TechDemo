@@ -15,6 +15,7 @@
 using System;
 using System.Reflection;
 using System.Windows;
+using FirstFloor.ModernUI.Windows.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
@@ -52,6 +53,8 @@ namespace TechDemo.Client.ViewModel
                     throw;
                 }
             }
+
+            Application.Current.Properties["Layout"] = TabLayout.Tab;
         }
 
         public MainViewModel Main

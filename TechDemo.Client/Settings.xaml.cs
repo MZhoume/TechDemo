@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using FirstFloor.ModernUI.Windows.Controls;
 
 namespace TechDemo.Client
 {
@@ -23,6 +24,11 @@ namespace TechDemo.Client
         public Settings()
         {
             InitializeComponent();
+        }
+
+        private void Selector_OnSelected(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Properties["Layout"] = comboBox.SelectedIndex == 0 ? TabLayout.Tab : TabLayout.List;
         }
     }
 }

@@ -24,16 +24,6 @@ namespace TechDemo.Server
         public ServerControl()
         {
             InitializeComponent();
-
-            Messenger.Default.Register<NotificationMessage<int>>("Init UI", (m) =>
-            {
-                // TODO: Init uis as data received and binding to viewmodel
-            });
-
-            Messenger.Default.Register<string>("Stopped", (m) =>
-            {
-                //TODO: clear all views
-            });
         }
     }
 }

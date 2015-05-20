@@ -58,8 +58,6 @@ namespace TechDemo.Server.ViewModel
 
                 _dataModels[i1] = new List<IDataModel>();
             }
-
-            Messenger.Default.Send(new NotificationMessage<int>(coms.Length, "Init UI"));
         }
 
         private void _dataService_DataArrived(IDataModel obj)
@@ -67,7 +65,7 @@ namespace TechDemo.Server.ViewModel
             _dataModels[obj.ServerID].Add(obj);
 
             _dbContext.AddData(obj);
-            
+
             _dbContext.SaveChangesAsync();
 
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
@@ -273,13 +271,7 @@ namespace TechDemo.Server.ViewModel
             }
         }
 
-        public string Error
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public string Error { get; }
 
         public string this[string columnName]
         {
@@ -295,6 +287,13 @@ namespace TechDemo.Server.ViewModel
                 }
                 return null;
             }
+        }
+
+        public override void Cleanup()
+        {
+            base.Cleanup();
+
+            _socket.Close();
         }
     }
 }

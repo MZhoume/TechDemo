@@ -1,8 +1,12 @@
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -24,10 +28,9 @@ namespace TechDemo.Client.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : ViewModelBase,IDataErrorInfo
     {
         private bool _isMonitoring;
-        private bool _hasInit;
         private readonly ISocketClient _socketClient;
 
         /// <summary>
@@ -41,15 +44,34 @@ namespace TechDemo.Client.ViewModel
 
         private void _socketClient_DataReceived(IDataModel[] objs)
         {
-            if (!_hasInit)
+            if (objs.Length != DataModels.Count)
             {
-                DataModels = new IDataModel[objs.Length];
-                Messenger.Default.Send(new NotificationMessage<int>(objs.Length, "Init UI"));
+                Messenger.Default.Send(new GenericMessage<List<List<IDataModel>>>(DataModels));
+
+                if (objs.Length > DataModels.Count)
+                {
+                    for (int i = 0; i < objs.Length - DataModels.Count; i++)
+                    {
+                        DataModels.Add(new List<IDataModel>());
+                        DisplayControls.Add(ServiceLocator.Current.GetInstance<IDisplayControl>(Guid.NewGuid().ToString()));
+                    }
+                }
+                else
+                {
+                    var count = DataModels.Count - objs.Length;
+                    DataModels.RemoveRange(DataModels.Count - count - 1, count);
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        DisplayControls.RemoveAt(i);
+                    }
+                }
             }
 
             for (int i = 0; i < objs.Length; i++)
             {
-                DataModels[i] = objs[i];
+                DataModels[i].Add(objs[i]);
+                DisplayControls[i].PopulateData(objs[i]);
             }
         }
 
@@ -94,7 +116,8 @@ namespace TechDemo.Client.ViewModel
                         {
                             ButtonString = "Start Monitoring";
                             Messenger.Default.Send("Stopped");
-                            _hasInit = false;
+                            DataModels = new List<List<IDataModel>>();
+                            Messenger.Default.Send(new GenericMessage<List<List<IDataModel>>>(this, DataModels));
                         }
                         else
                         {
@@ -188,13 +211,13 @@ namespace TechDemo.Client.ViewModel
         /// </summary>
         public const string DataModelsPropertyName = "DataModel";
 
-        private IDataModel[] _dataModels = null;
+        private List<List<IDataModel>> _dataModels = new List<List<IDataModel>>();
 
         /// <summary>
         /// Sets and gets the DataModel property.
         /// Changes to that property's value raise the PropertyChanged event. 
         /// </summary>
-        public IDataModel[] DataModels
+        public List<List<IDataModel>> DataModels
         {
             get
             {
@@ -203,52 +226,6 @@ namespace TechDemo.Client.ViewModel
             set
             {
                 Set(() => DataModels, ref _dataModels, value);
-            }
-        }
-
-        /// <summary>
-        /// The <see cref="ChartDisplayStyleID" /> property's name.
-        /// </summary>
-        public const string ChartDisplayStyleIDPropertyName = "ChartDisplayStyleID";
-
-        private int _chartDisplayStyleID = 0;
-
-        /// <summary>
-        /// Sets and gets the ChartDisplayStyleID property.
-        /// Changes to that property's value raise the PropertyChanged event. 
-        /// </summary>
-        public int ChartDisplayStyleID
-        {
-            get
-            {
-                return _chartDisplayStyleID;
-            }
-            set
-            {
-                Set(() => ChartDisplayStyleID, ref _chartDisplayStyleID, value);
-            }
-        }
-
-        /// <summary>
-        /// The <see cref="ChartCollection" /> property's name.
-        /// </summary>
-        public const string ChartCollectionPropertyName = "ChartCollection";
-
-        private ObservableDataSource<IDataModel> _chartCollection = new ObservableDataSource<IDataModel>();
-
-        /// <summary>
-        /// Sets and gets the ChartCollection property.
-        /// Changes to that property's value raise the PropertyChanged event. 
-        /// </summary>
-        public ObservableDataSource<IDataModel> ChartCollection
-        {
-            get
-            {
-                return _chartCollection;
-            }
-            set
-            {
-                Set(() => ChartCollection, ref _chartCollection, value);
             }
         }
 
@@ -274,5 +251,23 @@ namespace TechDemo.Client.ViewModel
                 Set(() => DisplayControls, ref _displayControls, value);
             }
         }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                if (columnName == IPAddressPropertyName)
+                {
+                    return String.IsNullOrEmpty(_ipAddress) ? "Required" : null;
+                }
+                if (columnName == PortPropertyName)
+                {
+                    return String.IsNullOrEmpty(_port) ? "Required" : null;
+                }
+                return null;
+            }
+        }
+
+        public string Error { get; }
     }
 }
