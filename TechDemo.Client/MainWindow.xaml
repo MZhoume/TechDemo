@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mui="http://firstfloorsoftware.com/ModernUI"
         xmlns:local="clr-namespace:TechDemo.Client"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525"
+        mc:Ignorable="d" ContentSource="/Introduction.xaml"
+        Title="MainWindow" Height="480" Width="640"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="Settings" Source="/Settings.xaml" />
@@ -21,7 +21,7 @@
         <mui:LinkGroup DisplayName="Data">
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="Data Monitoring" Source="/DataDisplay.xaml" />
-                <mui:Link DisplayName="Settings" Source="/Settings.xaml" />
+                <mui:Link DisplayName="Chart Display" Source="/ChartDisplay.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
     </mui:ModernWindow.MenuLinkGroups>

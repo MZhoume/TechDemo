@@ -8,8 +8,9 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Threading;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using TechDemo.Interface.Client;
@@ -28,7 +29,7 @@ namespace TechDemo.Client.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase,IDataErrorInfo
+    public class MainViewModel : ViewModelBase, IDataErrorInfo
     {
         private bool _isMonitoring;
         private readonly ISocketClient _socketClient;
@@ -40,39 +41,43 @@ namespace TechDemo.Client.ViewModel
         {
             _socketClient = ServiceLocator.Current.GetInstance<ISocketClient>();
             _socketClient.DataReceived += _socketClient_DataReceived;
+            Messenger.Default.Send(new GenericMessage<List<ObservableCollection<IDataModel>>>(DataModels));
         }
 
         private void _socketClient_DataReceived(IDataModel[] objs)
         {
-            if (objs.Length != DataModels.Count)
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                Messenger.Default.Send(new GenericMessage<List<List<IDataModel>>>(DataModels));
-
-                if (objs.Length > DataModels.Count)
+                if (objs.Length != DataModels.Count)
                 {
-                    for (int i = 0; i < objs.Length - DataModels.Count; i++)
+                    Messenger.Default.Send(new GenericMessage<List<ObservableCollection<IDataModel>>>(DataModels));
+
+                    if (objs.Length > DataModels.Count)
                     {
-                        DataModels.Add(new List<IDataModel>());
-                        DisplayControls.Add(ServiceLocator.Current.GetInstance<IDisplayControl>(Guid.NewGuid().ToString()));
+                        for (int i = 0; i < objs.Length - DataModels.Count; i++)
+                        {
+                            DataModels.Add(new ObservableCollection<IDataModel>());
+                            DisplayControls.Add(ServiceLocator.Current.GetInstance<IDisplayControl>(Guid.NewGuid().ToString()));
+                        }
+                    }
+                    else
+                    {
+                        var count = DataModels.Count - objs.Length;
+                        DataModels.RemoveRange(DataModels.Count - count - 1, count);
+
+                        for (int i = 0; i < count; i++)
+                        {
+                            DisplayControls.RemoveAt(i);
+                        }
                     }
                 }
-                else
+
+                for (int i = 0; i < objs.Length; i++)
                 {
-                    var count = DataModels.Count - objs.Length;
-                    DataModels.RemoveRange(DataModels.Count - count - 1, count);
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        DisplayControls.RemoveAt(i);
-                    }
+                    DataModels[i].Add(objs[i]);
+                    DisplayControls[i].PopulateData(objs[i]);
                 }
-            }
-
-            for (int i = 0; i < objs.Length; i++)
-            {
-                DataModels[i].Add(objs[i]);
-                DisplayControls[i].PopulateData(objs[i]);
-            }
+            });
         }
 
 
@@ -112,12 +117,17 @@ namespace TechDemo.Client.ViewModel
                     ?? (_toggleMonitoring = new RelayCommand(
                     () =>
                     {
+                        if (!_toggleMonitoring.CanExecute(null))
+                        {
+                            return;
+                        }
+
                         if (_isMonitoring)
                         {
                             ButtonString = "Start Monitoring";
                             Messenger.Default.Send("Stopped");
-                            DataModels = new List<List<IDataModel>>();
-                            Messenger.Default.Send(new GenericMessage<List<List<IDataModel>>>(this, DataModels));
+                            DataModels = new List<ObservableCollection<IDataModel>>();
+                            Messenger.Default.Send(new GenericMessage<List<ObservableCollection<IDataModel>>>(this, DataModels));
                         }
                         else
                         {
@@ -156,7 +166,8 @@ namespace TechDemo.Client.ViewModel
                         }
 
                         _isMonitoring = !_isMonitoring;
-                    }));
+                    }, () =>
+                    !(string.IsNullOrEmpty(_ipAddress) || string.IsNullOrEmpty(_port))));
             }
         }
 
@@ -211,13 +222,13 @@ namespace TechDemo.Client.ViewModel
         /// </summary>
         public const string DataModelsPropertyName = "DataModel";
 
-        private List<List<IDataModel>> _dataModels = new List<List<IDataModel>>();
+        private List<ObservableCollection<IDataModel>> _dataModels = new List<ObservableCollection<IDataModel>>();
 
         /// <summary>
         /// Sets and gets the DataModel property.
         /// Changes to that property's value raise the PropertyChanged event. 
         /// </summary>
-        public List<List<IDataModel>> DataModels
+        public List<ObservableCollection<IDataModel>> DataModels
         {
             get
             {

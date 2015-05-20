@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,15 +34,6 @@ namespace TechDemo.Client
 
         public void OnFragmentNavigation(FragmentNavigationEventArgs e)
         {
-            var count = (Application.Current.Properties["DataModels"] as List<IDataModel>).Count;
-            for (int i = 0; i < count; i++)
-            {
-                modernTab.Links.Add(new Link()
-                {
-                    DisplayName = $"Data Source {i.ToString()}".ToString(),
-                    Source = new Uri($"/Chart.xaml#{i.ToString()}")
-                });
-            }
         }
 
         public void OnNavigatedFrom(NavigationEventArgs e)
@@ -50,6 +42,15 @@ namespace TechDemo.Client
 
         public void OnNavigatedTo(NavigationEventArgs e)
         {
+            var count = (Application.Current.Properties["DataModels"] as List<ObservableCollection<IDataModel>>).Count;
+            for (int i = 0; i < count; i++)
+            {
+                modernTab.Links.Add(new Link()
+                {
+                    DisplayName = $"Data Source {i.ToString()}".ToString(),
+                    Source = new Uri($"/Chart.xaml#{i.ToString()}", UriKind.Relative)
+                });
+            }
         }
 
         public void OnNavigatingFrom(NavigatingCancelEventArgs e)

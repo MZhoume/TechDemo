@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace TechDemo.Client
         {
             InitializeComponent();
 
-            Messenger.Default.Register<GenericMessage<List<List<IDataModel>>>>(this, (msg) =>
+            Messenger.Default.Register<GenericMessage<List<ObservableCollection<IDataModel>>>>(this, (msg) =>
             {
                 Application.Current.Properties["DataModels"] = msg.Content;
             });

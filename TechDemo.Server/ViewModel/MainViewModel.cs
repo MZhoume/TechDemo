@@ -175,7 +175,8 @@ namespace TechDemo.Server.ViewModel
                             }
 
                             _isListening = !_isListening;
-                        }, () => !(string.IsNullOrEmpty(_ipAddress) || string.IsNullOrEmpty(_port))));
+                        }, () => 
+                        !(string.IsNullOrEmpty(_ipAddress) || string.IsNullOrEmpty(_port))));
             }
         }
 
@@ -279,11 +280,11 @@ namespace TechDemo.Server.ViewModel
             {
                 if (columnName == IPAddressPropertyName)
                 {
-                    return String.IsNullOrEmpty(_ipAddress) ? "Required" : null;
+                    return string.IsNullOrEmpty(_ipAddress) ? "Required" : null;
                 }
                 if (columnName == PortPropertyName)
                 {
-                    return String.IsNullOrEmpty(_port) ? "Required" : null;
+                    return string.IsNullOrEmpty(_port) ? "Required" : null;
                 }
                 return null;
             }
