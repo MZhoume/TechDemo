@@ -26,7 +26,7 @@ namespace TechDemo.Client
             InitializeComponent();
         }
 
-        private void Selector_OnSelected(object sender, RoutedEventArgs e)
+        private void ComboBox_OnDropDownClosed(object sender, EventArgs e)
         {
             Application.Current.Properties["Layout"] = comboBox.SelectedIndex == 0 ? TabLayout.Tab : TabLayout.List;
         }

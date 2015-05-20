@@ -25,7 +25,7 @@
         </DockPanel>
         <StackPanel d:LayoutOverrides="LeftPosition, RightPosition" Margin="0,5">
             <TextBlock Style="{StaticResource Heading2}" x:Name="tbStyle" TextWrapping="Wrap" Text="ChartViewLayout"/>
-            <ComboBox x:Name="comboBox" SelectedIndex="0" Selected="Selector_OnSelected">
+            <ComboBox x:Name="comboBox" SelectedIndex="0" DropDownClosed="ComboBox_OnDropDownClosed">
                 <ComboBoxItem Content="Tab View"/>
                 <ComboBoxItem Content="List View"/>
             </ComboBox>
