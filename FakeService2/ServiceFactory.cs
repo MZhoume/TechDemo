@@ -9,9 +9,9 @@ namespace FakeService2
 {
     public class ServiceFactory : IServiceFactory
     {
-        public IDataService CreateService(params object[] objs)
+        public TechDemo.Interface.Server.DataService CreateService(int id, params object[] objs)
         {
-            return new DataService(objs[0] as string);
+            return new DataService(id, objs[0] as string);
         }
     }
 }

@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBContext.cs" />
-    <Compile Include="IDataService.cs" />
+    <Compile Include="DataService.cs" />
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="ISocketServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

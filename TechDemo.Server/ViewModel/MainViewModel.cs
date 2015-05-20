@@ -6,12 +6,13 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Practices.ServiceLocation;
 using TechDemo.Interface.Client;
 using TechDemo.Interface.Server;
 using System.Linq;
+using System.Threading;
 using GalaSoft.MvvmLight.Threading;
 
 namespace TechDemo.Server.ViewModel
@@ -28,9 +29,9 @@ namespace TechDemo.Server.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase,IDataErrorInfo
+    public class MainViewModel : ViewModelBase, IDataErrorInfo
     {
-        private readonly IDataService[] _dataServices;
+        private readonly DataService[] _dataServices;
         private readonly DBContext _dbContext;
         private readonly ISocketServer _socketServer;
 
@@ -43,7 +44,7 @@ namespace TechDemo.Server.ViewModel
         {
             var serviceFactory = ServiceLocator.Current.GetInstance<IServiceFactory>();
             var coms = Properties.Settings.Default.SerialPorts.Split(',', ' ', ';');
-            _dataServices = new IDataService[coms.Length];
+            _dataServices = new DataService[coms.Length];
             _dataModels = new List<IDataModel>[coms.Length];
 
             _dbContext = ServiceLocator.Current.GetInstance<DBContext>();
@@ -51,10 +52,11 @@ namespace TechDemo.Server.ViewModel
 
             for (var i = 0; i < coms.Length; i++)
             {
-                _dataServices[i] = serviceFactory.CreateService(coms[i], i);
-                _dataServices[i].DataArrived += _dataService_DataArrived;
+                var i1 = i;
+                _dataServices[i1] = serviceFactory.CreateService(i1, coms[i1]);
+                _dataServices[i1].DataArrived += _dataService_DataArrived;
 
-                _dataModels[i] = new List<IDataModel>();
+                _dataModels[i1] = new List<IDataModel>();
             }
 
             Messenger.Default.Send(new NotificationMessage<int>(coms.Length, "Init UI"));
@@ -65,7 +67,13 @@ namespace TechDemo.Server.ViewModel
             _dataModels[obj.ServerID].Add(obj);
 
             _dbContext.AddData(obj);
+            
             _dbContext.SaveChangesAsync();
+
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+            {
+                ServerLogs.Add($"Got new info at {DateTime.Now.ToLongTimeString()} from server {obj.ServerID}");
+            });
         }
 
         private bool _isListening;
@@ -83,6 +91,11 @@ namespace TechDemo.Server.ViewModel
                     ?? (_startListenCommand = new RelayCommand(
                         () =>
                         {
+                            if (!_startListenCommand.CanExecute(null))
+                            {
+                                return;
+                            }
+
                             if (_isListening)
                             {
                                 _socket.Close();
@@ -164,7 +177,7 @@ namespace TechDemo.Server.ViewModel
                             }
 
                             _isListening = !_isListening;
-                        }, ()=> string.IsNullOrEmpty(_ipAddress) || string.IsNullOrEmpty(_port)));
+                        }, () => !(string.IsNullOrEmpty(_ipAddress) || string.IsNullOrEmpty(_port))));
             }
         }
 

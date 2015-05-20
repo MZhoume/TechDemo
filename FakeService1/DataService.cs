@@ -11,13 +11,14 @@ using Timer = System.Timers.Timer;
 
 namespace FakeService1
 {
-    public class DataService : IDataService
+    public class DataService : TechDemo.Interface.Server.DataService
     {
-        public DataService(string portname)
+        public DataService(int id, string portName)
+            :base(id)
         {
-            MessageBox.Show($"Creating service at {portname}");
+            MessageBox.Show($"Creating service at {portName}");
 
-            var timer = new Timer(10000);
+            var timer = new Timer(3000);
             timer.Elapsed += Timer_Elapsed;
 
             timer.Start();
@@ -25,11 +26,9 @@ namespace FakeService1
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            DataArrived?.Invoke(new DataModel() {I = 100});
+            DataArrived?.Invoke(new DataModel() {I = 100, ServerID = ID});
         }
 
-        public event Action<IDataModel> DataArrived;
-
-        public int ID { get; set; }
+        public override event Action<IDataModel> DataArrived;
     }
 }

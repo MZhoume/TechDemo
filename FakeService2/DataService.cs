@@ -9,17 +9,16 @@ using TechDemo.Interface.Server;
 
 namespace FakeService2
 {
-    public class DataService : IDataService
+    public class DataService : TechDemo.Interface.Server.DataService
     {
         private SerialPort _serialPort;
 
-        public DataService(string portname)
+        public DataService(int id, string portname)
+            :base(id)
         {
             _serialPort = new SerialPort(portname);
         }
 
-        public event Action<IDataModel> DataArrived;
-
-        public int ID { get; set; }
+        public override event Action<IDataModel> DataArrived;
     }
 }

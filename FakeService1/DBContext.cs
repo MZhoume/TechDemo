@@ -25,5 +25,15 @@ namespace FakeService1
                 DataModel.Add(data as DataModel);
             }
         }
+
+        public override Task<int> SaveChangesAsync()
+        {
+            Task<int> task;
+            lock (_lock)
+            {
+                task = base.SaveChangesAsync();
+            }
+            return task;
+        }
     }
 }
