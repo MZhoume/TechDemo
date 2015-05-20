@@ -14,7 +14,7 @@ namespace TechDemo.Interface.Server
             ID = id;
         }
 
-        public abstract event Action<IDataModel> DataArrived;
+        public abstract event Action<AbsDataModel> DataArrived;
 
         protected int ID { get; private set; }
     }

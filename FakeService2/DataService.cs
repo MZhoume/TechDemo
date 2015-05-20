@@ -19,6 +19,6 @@ namespace FakeService2
             _serialPort = new SerialPort(portname);
         }
 
-        public override event Action<IDataModel> DataArrived;
+        public override event Action<TechDemo.Interface.Client.AbsDataModel> DataArrived;
     }
 }

@@ -35,7 +35,7 @@ namespace TechDemo.Server.ViewModel
         private readonly DBContext _dbContext;
         private readonly ISocketServer _socketServer;
 
-        private readonly List<IDataModel>[] _dataModels;
+        private readonly List<AbsDataModel>[] _dataModels;
 
         private readonly List<Socket> _clientsToDelete = new List<Socket>();
         private readonly List<Socket> _clients = new List<Socket>();
@@ -48,7 +48,7 @@ namespace TechDemo.Server.ViewModel
             var serviceFactory = ServiceLocator.Current.GetInstance<IServiceFactory>();
             var coms = Properties.Settings.Default.SerialPorts.Split(',', ' ', ';');
             _dataServices = new DataService[coms.Length];
-            _dataModels = new List<IDataModel>[coms.Length];
+            _dataModels = new List<AbsDataModel>[coms.Length];
 
             _dbContext = ServiceLocator.Current.GetInstance<DBContext>();
             _socketServer = ServiceLocator.Current.GetInstance<ISocketServer>();
@@ -59,11 +59,11 @@ namespace TechDemo.Server.ViewModel
                 _dataServices[i1] = serviceFactory.CreateService(i1, coms[i1]);
                 _dataServices[i1].DataArrived += _dataService_DataArrived;
 
-                _dataModels[i1] = new List<IDataModel>();
+                _dataModels[i1] = new List<AbsDataModel>();
             }
         }
 
-        private void _dataService_DataArrived(IDataModel obj)
+        private void _dataService_DataArrived(AbsDataModel obj)
         {
             _dataModels[obj.ServerID].Add(obj);
 

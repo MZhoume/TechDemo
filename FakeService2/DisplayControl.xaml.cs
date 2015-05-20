@@ -26,7 +26,7 @@ namespace FakeService2
             InitializeComponent();
         }
 
-        public void PopulateData(IDataModel data)
+        public void PopulateData(TechDemo.Interface.Client.AbsDataModel data)
         {
             throw new NotImplementedException();
         }

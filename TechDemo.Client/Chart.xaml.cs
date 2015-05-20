@@ -35,7 +35,7 @@ namespace TechDemo.Client
         private int _dataCount;
         private string[] _keys;
         private int _time;
-        private ObservableCollection<IDataModel> _list;
+        private ObservableCollection<AbsDataModel> _list;
         private LineGraph[] _graphs = new LineGraph[0];
 
         public Chart()
@@ -60,7 +60,7 @@ namespace TechDemo.Client
             }
 
             var num = int.Parse(e.Fragment);
-            _list = (Application.Current.Properties["DataModels"] as List<ObservableCollection<IDataModel>>)[num];
+            _list = (Application.Current.Properties["DataModels"] as List<ObservableCollection<AbsDataModel>>)[num];
 
             var model = _list[0].ValuesToDraw;
             _dataCount = model.Count;
@@ -101,7 +101,7 @@ namespace TechDemo.Client
 
         private void List_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            var data = e.NewItems[0] as IDataModel;
+            var data = e.NewItems[0] as AbsDataModel;
             for (int i = 0; i < _dataCount; i++)
             {
                 var i1 = i;

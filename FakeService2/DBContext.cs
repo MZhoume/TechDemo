@@ -16,7 +16,7 @@ namespace FakeService2
 
         public DbSet<DataModel> DataModels { get; }
 
-        public override void AddData(IDataModel data)
+        public override void AddData(TechDemo.Interface.Client.AbsDataModel data)
         {
             DataModels.Add(data as DataModel);
         }

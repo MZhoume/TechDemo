@@ -46,7 +46,7 @@ namespace TechDemo.Server.ViewModel
                 {
                     var assembly = Assembly.Load(Settings.Default.AssemblyName);
                     SimpleIoc.Default.Register(() => assembly.CreateInstance(Settings.Default.AssemblyName+".DisplayControl") as IDisplayControl);
-                    SimpleIoc.Default.Register(() => assembly.CreateInstance(Settings.Default.AssemblyName + ".DataModel") as IDataModel);
+                    SimpleIoc.Default.Register(() => assembly.CreateInstance(Settings.Default.AssemblyName + ".DataModel") as AbsDataModel);
                     SimpleIoc.Default.Register(() => assembly.CreateInstance(Settings.Default.AssemblyName + ".SocketClient") as ISocketClient);
 
                     SimpleIoc.Default.Register(() => Activator.CreateInstance(assembly.GetType(Settings.Default.AssemblyName + ".DBContext"),

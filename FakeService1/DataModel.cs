@@ -9,12 +9,9 @@ using TechDemo.Interface.Client;
 
 namespace FakeService1
 {
-    public class DataModel : IDataModel
+    public class DataModel : TechDemo.Interface.Client.AbsDataModel
     {
         private byte i;
-
-        [Key]
-        public long rowid { get; set; }
 
         public int I { get; set; }
 
@@ -22,21 +19,21 @@ namespace FakeService1
 
         public int III { get; set; }
 
-        public byte[] ToBytes()
+        public override byte[] ToBytes()
         {
             return new[] { i++, i, (byte)(i + 1) };
         }
 
-        public void Parse(byte[] bytes)
+        public override void Parse(byte[] bytes)
         {
             I = bytes[0];
             II = bytes[1];
             III = bytes[2];
         }
 
-        public int ServerID { get; set; }
+        public override int ServerID { get; set; }
 
-        public Dictionary<string, double> ValuesToDraw => 
+        public override Dictionary<string, double> ValuesToDraw => 
             new Dictionary<string, double>()
         {
             ["I"]=I,

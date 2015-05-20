@@ -17,6 +17,6 @@ namespace TechDemo.Interface.Server
         {
         }
 
-        public abstract void AddData(IDataModel data);
+        public abstract void AddData(AbsDataModel data);
     }
 }

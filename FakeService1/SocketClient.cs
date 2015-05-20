@@ -23,7 +23,7 @@ namespace FakeService1
 
         private int i;
 
-        public event Action<IDataModel[]> DataReceived;
+        public event Action<TechDemo.Interface.Client.AbsDataModel[]> DataReceived;
         public byte[] GetResponseBytes(bool isStopIntended)
         {
             return new[] { (byte)(isStopIntended ? 0xff : 0x00) };
@@ -31,7 +31,7 @@ namespace FakeService1
 
         public void Parse(byte[] bytes)
         {
-            DataReceived?.Invoke(new IDataModel[]
+            DataReceived?.Invoke(new TechDemo.Interface.Client.AbsDataModel[]
             {
                 new DataModel() { I =i,II = i,III = i++},
                 new DataModel() { I =i,II = i,III = i},

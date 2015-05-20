@@ -8,20 +8,20 @@ using TechDemo.Interface.Client;
 
 namespace FakeService2
 {
-    public class DataModel : IDataModel
+    public class DataModel : TechDemo.Interface.Client.AbsDataModel
     {
-        public byte[] ToBytes()
+        public override byte[] ToBytes()
         {
             throw new NotImplementedException();
         }
 
-        public void Parse(byte[] bytes)
+        public override void Parse(byte[] bytes)
         {
             throw new NotImplementedException();
         }
 
-        public int ServerID { get; set; }
+        public override int ServerID { get; set; }
 
-        public Dictionary<string, double> ValuesToDraw { get; }
+        public override Dictionary<string, double> ValuesToDraw { get; }
     }
 }

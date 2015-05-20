@@ -28,7 +28,7 @@ namespace TechDemo.Client
         {
             InitializeComponent();
 
-            Messenger.Default.Register<GenericMessage<List<ObservableCollection<IDataModel>>>>(this, (msg) =>
+            Messenger.Default.Register<GenericMessage<List<ObservableCollection<AbsDataModel>>>>(this, (msg) =>
             {
                 Application.Current.Properties["DataModels"] = msg.Content;
             });
