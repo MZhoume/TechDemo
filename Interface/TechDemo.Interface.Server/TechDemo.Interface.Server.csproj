@@ -50,8 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DBContext.cs" />
-    <Compile Include="DataService.cs" />
+    <Compile Include="AbsDBContext.cs" />
+    <Compile Include="AbsDataService.cs" />
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="ISocketServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

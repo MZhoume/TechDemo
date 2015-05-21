@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataModel.cs" />
+    <Compile Include="AbsDataModel.cs" />
     <Compile Include="IDisplayControl.cs" />
     <Compile Include="ISocketClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

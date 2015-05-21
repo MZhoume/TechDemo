@@ -7,14 +7,14 @@ using TechDemo.Interface.Client;
 
 namespace TechDemo.Interface.Server
 {
-    public abstract class DataService
+    public abstract class AbsDataService
     {
-        protected DataService(int id)
+        protected AbsDataService(int id)
         {
             ID = id;
         }
 
-        public abstract event Action<DataModel> DataArrived;
+        public abstract event Action<AbsDataModel> DataArrived;
 
         protected int ID { get; private set; }
     }

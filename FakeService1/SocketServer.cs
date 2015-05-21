@@ -11,7 +11,7 @@ namespace FakeService1
 {
     public class SocketServer : ISocketServer
     {
-        public byte[] GenerateBytes(TechDemo.Interface.Client.DataModel[] dataModels)
+        public byte[] GenerateBytes(TechDemo.Interface.Client.AbsDataModel[] dataModels)
         {
             return new byte[] { 0x00 };
         }

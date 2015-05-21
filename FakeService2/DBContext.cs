@@ -9,14 +9,14 @@ using TechDemo.Interface.Client;
 
 namespace FakeService2
 {
-    public class DBContext : TechDemo.Interface.Server.DBContext
+    public class DBContext : TechDemo.Interface.Server.AbsDBContext
     {
         public DBContext(DbConnection conn) : base(conn)
         { }
 
         public DbSet<DataModel> DataModels { get; set; }
 
-        public override void AddData(TechDemo.Interface.Client.DataModel data)
+        public override void AddData(TechDemo.Interface.Client.AbsDataModel data)
         {
             DataModels.Add(data as DataModel);
         }

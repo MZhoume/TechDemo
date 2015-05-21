@@ -11,7 +11,7 @@ using Timer = System.Timers.Timer;
 
 namespace FakeService1
 {
-    public class DataService : TechDemo.Interface.Server.DataService
+    public class DataService : TechDemo.Interface.Server.AbsDataService
     {
         public DataService(int id, string portName)
             :base(id)
@@ -29,6 +29,6 @@ namespace FakeService1
             DataArrived?.Invoke(new DataModel() {I = 100, ServerID = ID});
         }
 
-        public override event Action<TechDemo.Interface.Client.DataModel> DataArrived;
+        public override event Action<TechDemo.Interface.Client.AbsDataModel> DataArrived;
     }
 }

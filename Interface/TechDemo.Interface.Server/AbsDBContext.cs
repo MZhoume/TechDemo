@@ -10,13 +10,13 @@ using TechDemo.Interface.Client;
 namespace TechDemo.Interface.Server
 {
     // ReSharper disable once InconsistentNaming
-    public abstract class DBContext : DbContext
+    public abstract class AbsDBContext : DbContext
     {
-        public DBContext(DbConnection conn)
+        public AbsDBContext(DbConnection conn)
             : base(conn, true)
         {
         }
 
-        public abstract void AddData(DataModel data);
+        public abstract void AddData(AbsDataModel data);
     }
 }

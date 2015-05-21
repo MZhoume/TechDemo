@@ -45,7 +45,7 @@ namespace TechDemo.Client
         {
             modernTab.Layout = (TabLayout) Application.Current.Properties["Layout"];
 
-            var count = (Application.Current.Properties["DataModels"] as List<ObservableCollection<DataModel>>)?.Count;
+            var count = (Application.Current.Properties["DataModels"] as List<ObservableCollection<AbsDataModel>>)?.Count;
             for (int i = 0; i < count; i++)
             {
                 modernTab.Links.Add(new Link()

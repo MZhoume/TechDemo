@@ -26,7 +26,7 @@ namespace FakeService1
             InitializeComponent();
         }
 
-        public void PopulateData(TechDemo.Interface.Client.DataModel data)
+        public void PopulateData(TechDemo.Interface.Client.AbsDataModel data)
         {
             var dat = data as DataModel;
             I.Text = dat.I.ToString();

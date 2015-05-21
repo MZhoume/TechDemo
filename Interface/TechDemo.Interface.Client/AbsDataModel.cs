@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TechDemo.Interface.Client
 {
-    public abstract class DataModel
+    public abstract class AbsDataModel
     {
         [Key]
         public long rowid { get; set; }

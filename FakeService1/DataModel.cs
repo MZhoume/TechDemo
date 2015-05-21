@@ -9,7 +9,7 @@ using TechDemo.Interface.Client;
 
 namespace FakeService1
 {
-    public class DataModel : TechDemo.Interface.Client.DataModel
+    public class DataModel : TechDemo.Interface.Client.AbsDataModel
     {
         private byte i;
 

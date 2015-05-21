@@ -11,7 +11,7 @@ using TechDemo.Interface.Server;
 
 namespace FakeService2
 {
-    public class DataService : TechDemo.Interface.Server.DataService
+    public class DataService : TechDemo.Interface.Server.AbsDataService
     {
         public DataService(int id, string portname)
             :base(id)
@@ -29,6 +29,6 @@ namespace FakeService2
             DataArrived?.Invoke(new DataModel() { A = 200, ServerID = ID });
         }
 
-        public override event Action<TechDemo.Interface.Client.DataModel> DataArrived;
+        public override event Action<TechDemo.Interface.Client.AbsDataModel> DataArrived;
     }
 }

@@ -9,7 +9,7 @@ namespace TechDemo.Interface.Server
 {
     public interface ISocketServer
     {
-        byte[] GenerateBytes(DataModel[] dataModels);
+        byte[] GenerateBytes(AbsDataModel[] dataModels);
 
         bool IsStopIntended(byte[] data);
     }

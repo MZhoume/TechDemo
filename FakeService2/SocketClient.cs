@@ -9,7 +9,7 @@ namespace FakeService2
 {
     public class SocketClient : ISocketClient
     {
-        public event Action<TechDemo.Interface.Client.DataModel[]> DataReceived;
+        public event Action<TechDemo.Interface.Client.AbsDataModel[]> DataReceived;
         public byte[] GetResponseBytes(bool isStopIntended)
         {
             return new [] { (byte)(isStopIntended ? 0xff : 0x00) };

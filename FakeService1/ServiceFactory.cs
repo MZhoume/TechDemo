@@ -9,7 +9,7 @@ namespace FakeService1
 {
     public class ServiceFactory : IServiceFactory
     {
-        public TechDemo.Interface.Server.DataService CreateService(int id, string str)
+        public TechDemo.Interface.Server.AbsDataService CreateService(int id, string str)
         {
             return new DataService(id, str);
         }

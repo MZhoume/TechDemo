@@ -9,7 +9,7 @@ using TechDemo.Interface.Client;
 
 namespace FakeService1
 {
-    public class DBContext : TechDemo.Interface.Server.DBContext
+    public class DBContext : TechDemo.Interface.Server.AbsDBContext
     {
         private readonly object _lock = new object();
 
@@ -18,7 +18,7 @@ namespace FakeService1
 
         public DbSet<DataModel> DataModel { get; set; }
 
-        public override void AddData(TechDemo.Interface.Client.DataModel data)
+        public override void AddData(TechDemo.Interface.Client.AbsDataModel data)
         {
             lock(_lock)
             {

@@ -31,11 +31,11 @@ namespace TechDemo.Server.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase, IDataErrorInfo
     {
-        private readonly DataService[] _dataServices;
-        private readonly DBContext _dbContext;
+        private readonly AbsDataService[] _dataServices;
+        private readonly AbsDBContext _dbContext;
         private readonly ISocketServer _socketServer;
 
-        private readonly List<DataModel>[] _dataModels;
+        private readonly List<AbsDataModel>[] _dataModels;
 
         private readonly List<Socket> _clientsToDelete = new List<Socket>();
         private readonly List<Socket> _clients = new List<Socket>();
@@ -47,10 +47,10 @@ namespace TechDemo.Server.ViewModel
         {
             var serviceFactory = ServiceLocator.Current.GetInstance<IServiceFactory>();
             var strings = Properties.Settings.Default.ServiceCtorString.Split(',', ' ', ';');
-            _dataServices = new DataService[strings.Length];
-            _dataModels = new List<DataModel>[strings.Length];
+            _dataServices = new AbsDataService[strings.Length];
+            _dataModels = new List<AbsDataModel>[strings.Length];
 
-            _dbContext = ServiceLocator.Current.GetInstance<DBContext>();
+            _dbContext = ServiceLocator.Current.GetInstance<AbsDBContext>();
             _socketServer = ServiceLocator.Current.GetInstance<ISocketServer>();
 
             for (var i = 0; i < strings.Length; i++)
@@ -59,11 +59,11 @@ namespace TechDemo.Server.ViewModel
                 _dataServices[i1] = serviceFactory.CreateService(i1, strings[i1]);
                 _dataServices[i1].DataArrived += _dataService_DataArrived;
 
-                _dataModels[i1] = new List<DataModel>();
+                _dataModels[i1] = new List<AbsDataModel>();
             }
         }
 
-        private void _dataService_DataArrived(DataModel obj)
+        private void _dataService_DataArrived(AbsDataModel obj)
         {
             _dataModels[obj.ServerID].Add(obj);
 
