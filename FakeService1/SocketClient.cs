@@ -33,8 +33,8 @@ namespace FakeService1
         {
             DataReceived?.Invoke(new TechDemo.Interface.Client.AbsDataModel[]
             {
-                new DataModel() { I =i,II = i,III = i++},
-                new DataModel() { I =i,II = i,III = i},
+                new DataModel(0) { I =i,II = i,III = i++},
+                new DataModel(1) { I =i,II = i,III = i},
             });
         }
     }

@@ -82,6 +82,10 @@ namespace TechDemo.Server.ViewModel
                 {
                     if (c.Available == 0)
                     {
+                        if (!c.Connected)
+                        {
+                            _clientsToDelete.Add(c);
+                        }
                         continue;
                     }
                     var b = new byte[c.Available];
@@ -111,6 +115,10 @@ namespace TechDemo.Server.ViewModel
                 foreach (var c in _clientsToDelete)
                 {
                     _clients.Remove(c);
+                    c.Close();
+
+                    DispatcherHelper.CheckBeginInvokeOnUI(()=>
+                        ServerLogs.Add("Client has disconnected."));
                 }
             }
         }
@@ -165,6 +173,9 @@ namespace TechDemo.Server.ViewModel
                                             {
                                                 var c = _socket.Accept();
                                                 _clients.Add(c);
+
+                                                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                                                    ServerLogs.Add("Client has connected."));
                                             }
                                             catch (Exception ex)
                                             {

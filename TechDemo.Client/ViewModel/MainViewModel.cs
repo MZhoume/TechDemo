@@ -134,32 +134,53 @@ namespace TechDemo.Client.ViewModel
                         {
                             Task.Factory.StartNew(() =>
                             {
-                                using (var socket = new System.Net.Sockets.Socket(
+                                using (var socket = new Socket(
                                     AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
                                 {
                                     var ipAddress = System.Net.IPAddress.Parse(IPAddress);
                                     var endPoint = new IPEndPoint(ipAddress, int.Parse(Port));
 
-                                    socket.Connect(endPoint);
+                                    try
+                                    {
+                                        socket.Connect(endPoint);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        _isMonitoring = true;
+                                        _toggleMonitoring.Execute(null);
+                                        MessageBox.Show(ex.Message);
+                                    }
+
+                                    socket.Blocking = true;
+
                                     Debug.WriteLine(
                                         $"Connected to {endPoint.Address}:{endPoint.Port}");
 
-                                    byte[] b;
+                                    byte[] b, buf = new byte[100];
                                     while (_isMonitoring)
                                     {
-                                        b = _socketClient.GetResponseBytes(false);
-                                        socket.Send(b);
+                                        try
+                                        {
+                                            b = _socketClient.GetResponseBytes(false);
+                                            socket.Send(b);
 
-                                        while (socket.Available == 0)
-                                        { }
+                                            socket.Receive(buf);
+                                            _socketClient.Parse(buf);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            _isMonitoring = false;
+                                            _toggleMonitoring.Execute(null);
 
-                                        b = new byte[socket.Available];
-                                        socket.Receive(b);
-                                        _socketClient.Parse(b);
+                                            MessageBox.Show(ex.Message);
+                                        }
                                     }
-                                    b = _socketClient.GetResponseBytes(true);
+                                    if (_isMonitoring)
+                                    {
+                                        b = _socketClient.GetResponseBytes(true);
 
-                                    socket.Send(b);
+                                        socket.Send(b);
+                                    }
                                 }
                             });
 

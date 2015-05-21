@@ -31,8 +31,6 @@ namespace FakeService1
             III = bytes[2];
         }
 
-        public override int ServerID { get; set; }
-
         public override Dictionary<string, double> ValuesToDraw => 
             new Dictionary<string, double>()
         {
@@ -40,5 +38,8 @@ namespace FakeService1
             ["II"]=II,
             ["III"]=III,
         };
+
+        public DataModel(int id) : base(id)
+        {}
     }
 }

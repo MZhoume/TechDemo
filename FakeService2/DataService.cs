@@ -26,7 +26,7 @@ namespace FakeService2
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            DataArrived?.Invoke(new DataModel() { A = 200, ServerID = ID });
+            DataArrived?.Invoke(new DataModel(ID) { A = 200});
         }
 
         public override event Action<TechDemo.Interface.Client.AbsDataModel> DataArrived;

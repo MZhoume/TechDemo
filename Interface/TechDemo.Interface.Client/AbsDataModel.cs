@@ -10,6 +10,13 @@ namespace TechDemo.Interface.Client
 {
     public abstract class AbsDataModel
     {
+        private AbsDataModel() { }
+
+        protected AbsDataModel(int id)
+        {
+            ServerID = id;
+        }
+
         [Key]
         public long rowid { get; set; }
 
@@ -17,7 +24,7 @@ namespace TechDemo.Interface.Client
 
         public abstract void Parse(byte[] bytes);
 
-        public abstract int ServerID { get; set; }
+        public int ServerID { get; private set; }
 
         public abstract Dictionary<string, double> ValuesToDraw { get; } 
     }

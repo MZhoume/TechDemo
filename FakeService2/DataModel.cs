@@ -30,8 +30,6 @@ namespace FakeService2
 
         public int AAA { get; set; }
 
-        public override int ServerID { get; set; }
-
         public override Dictionary<string, double> ValuesToDraw
         {
             get
@@ -44,5 +42,8 @@ namespace FakeService2
                 };
             }
         }
+
+        public DataModel(int id) : base(id)
+        {}
     }
 }

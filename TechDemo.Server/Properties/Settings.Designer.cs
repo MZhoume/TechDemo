@@ -43,8 +43,7 @@ namespace TechDemo.Server.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("data source = D:\\文档\\Visual Studio 2015\\Projects\\TechDemo\\TechDemo.Server\\Mock1.db" +
-            "")]
+        [global::System.Configuration.DefaultSettingValueAttribute("data source = D:\\Develop\\MultiPlatform\\TechDemo\\FakeService1\\Mock1.db")]
         public string ConnectionString {
             get {
                 return ((string)(this["ConnectionString"]));

@@ -29,6 +29,12 @@ namespace FakeService2
         public void PopulateData(TechDemo.Interface.Client.AbsDataModel data)
         {
             var dat = data as DataModel;
+
+            A.Content = dat.A;
+            AA.Content = dat.AA;
+            AAA.Content = dat.AAA;
+
+            id.Content = dat.ServerID;
         }
     }
 }
