@@ -44,15 +44,16 @@ namespace TechDemo.Server.ViewModel
             {
                 try
                 {
-                    var assembly = Assembly.Load(Settings.Default.AssemblyName);
-                    SimpleIoc.Default.Register(() => assembly.CreateInstance(Settings.Default.AssemblyName+".DisplayControl") as IDisplayControl);
-                    SimpleIoc.Default.Register(() => assembly.CreateInstance(Settings.Default.AssemblyName + ".DataModel") as AbsDataModel);
-                    SimpleIoc.Default.Register(() => assembly.CreateInstance(Settings.Default.AssemblyName + ".SocketClient") as ISocketClient);
+                    var assemblyClient = Assembly.Load(Settings.Default.ClientAssemblyName);
+                    SimpleIoc.Default.Register(() => assemblyClient.CreateInstance(Settings.Default.ClientAssemblyName+".DisplayControl") as IDisplayControl);
+                    SimpleIoc.Default.Register(() => assemblyClient.CreateInstance(Settings.Default.ClientAssemblyName + ".DataModel") as DataModel);
+                    SimpleIoc.Default.Register(() => assemblyClient.CreateInstance(Settings.Default.ClientAssemblyName + ".SocketClient") as ISocketClient);
 
-                    SimpleIoc.Default.Register(() => Activator.CreateInstance(assembly.GetType(Settings.Default.AssemblyName + ".DBContext"),
+                    var assemblyServer = Assembly.Load(Settings.Default.ServerAssemblyName);
+                    SimpleIoc.Default.Register(() => Activator.CreateInstance(assemblyServer.GetType(Settings.Default.ServerAssemblyName + ".DBContext"),
                         new SQLiteConnection(Settings.Default.ConnectionString)) as DBContext);
-                    SimpleIoc.Default.Register(() => assembly.CreateInstance(Settings.Default.AssemblyName + ".ServiceFactory") as IServiceFactory);
-                    SimpleIoc.Default.Register(() => assembly.CreateInstance(Settings.Default.AssemblyName + ".SocketServer") as ISocketServer);
+                    SimpleIoc.Default.Register(() => assemblyServer.CreateInstance(Settings.Default.ServerAssemblyName + ".ServiceFactory") as IServiceFactory);
+                    SimpleIoc.Default.Register(() => assemblyServer.CreateInstance(Settings.Default.ServerAssemblyName + ".SocketServer") as ISocketServer);
                 }
                 catch (Exception ex)
                 {

@@ -8,6 +8,6 @@ namespace TechDemo.Interface.Client
 {
     public interface IDisplayControl
     {
-        void PopulateData(AbsDataModel data);
+        void PopulateData(DataModel data);
     }
 }

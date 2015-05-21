@@ -11,14 +11,13 @@ namespace FakeService1
 {
     public class SocketServer : ISocketServer
     {
-        public byte[] GenerateBytes(TechDemo.Interface.Client.AbsDataModel[] dataModels)
+        public byte[] GenerateBytes(TechDemo.Interface.Client.DataModel[] dataModels)
         {
             return new byte[] { 0x00 };
         }
 
         public bool IsStopIntended(byte[] data)
         {
-            Thread.Sleep(500);
             return data[0] == 0xff;
         }
     }

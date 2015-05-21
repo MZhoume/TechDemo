@@ -9,15 +9,20 @@ namespace FakeService2
 {
     public class SocketClient : ISocketClient
     {
-        public event Action<TechDemo.Interface.Client.AbsDataModel[]> DataReceived;
+        public event Action<TechDemo.Interface.Client.DataModel[]> DataReceived;
         public byte[] GetResponseBytes(bool isStopIntended)
         {
-            throw new NotImplementedException();
+            return new [] { (byte)(isStopIntended ? 0xff : 0x00) };
         }
 
         public void Parse(byte[] bytes)
         {
-            throw new NotImplementedException();
+            DataReceived?.Invoke(new []
+            {
+                new DataModel() {AA = 2},
+                new DataModel() {AA = 2},
+                new DataModel() {AA = 2},
+            });
         }
     }
 }

@@ -26,18 +26,18 @@ namespace TechDemo.Server.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("FakeService1")]
-        public string AssemblyName {
+        public string ClientAssemblyName {
             get {
-                return ((string)(this["AssemblyName"]));
+                return ((string)(this["ClientAssemblyName"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("COM3")]
-        public string SerialPorts {
+        [global::System.Configuration.DefaultSettingValueAttribute("COM5")]
+        public string ServiceCtorString {
             get {
-                return ((string)(this["SerialPorts"]));
+                return ((string)(this["ServiceCtorString"]));
             }
         }
         
@@ -48,6 +48,15 @@ namespace TechDemo.Server.Properties {
         public string ConnectionString {
             get {
                 return ((string)(this["ConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("FakeService1")]
+        public string ServerAssemblyName {
+            get {
+                return ((string)(this["ServerAssemblyName"]));
             }
         }
     }

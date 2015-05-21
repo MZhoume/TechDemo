@@ -10,14 +10,14 @@ namespace FakeService2
 {
     public class SocketServer : ISocketServer
     {
-        public byte[] GenerateBytes(TechDemo.Interface.Client.AbsDataModel[] dataModels)
+        public byte[] GenerateBytes(TechDemo.Interface.Client.DataModel[] dataModels)
         {
-            throw new NotImplementedException();
+            return new byte[] { 0x00 };
         }
 
         public bool IsStopIntended(byte[] data)
         {
-            throw new NotImplementedException();
+            return data[0] == 0xff;
         }
     }
 }

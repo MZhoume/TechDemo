@@ -4,6 +4,8 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
+using System.Windows;
 using TechDemo.Interface.Client;
 using TechDemo.Interface.Server;
 
@@ -11,14 +13,22 @@ namespace FakeService2
 {
     public class DataService : TechDemo.Interface.Server.DataService
     {
-        private SerialPort _serialPort;
-
         public DataService(int id, string portname)
             :base(id)
         {
-            _serialPort = new SerialPort(portname);
+            MessageBox.Show($"Port name is {portname} and thie is from service 2");
+
+            var timer = new Timer(3000);
+            timer.Elapsed += Timer_Elapsed;
+
+            timer.Start();
         }
 
-        public override event Action<TechDemo.Interface.Client.AbsDataModel> DataArrived;
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            DataArrived?.Invoke(new DataModel() { A = 200, ServerID = ID });
+        }
+
+        public override event Action<TechDemo.Interface.Client.DataModel> DataArrived;
     }
 }

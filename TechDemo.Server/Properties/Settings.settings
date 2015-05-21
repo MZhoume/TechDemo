@@ -2,14 +2,17 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TechDemo.Server.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="AssemblyName" Type="System.String" Scope="Application">
+    <Setting Name="ClientAssemblyName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">FakeService1</Value>
     </Setting>
-    <Setting Name="SerialPorts" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">COM3</Value>
+    <Setting Name="ServiceCtorString" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">COM5</Value>
     </Setting>
     <Setting Name="ConnectionString" Type="System.String" Scope="Application">
       <Value Profile="(Default)">data source = D:\文档\Visual Studio 2015\Projects\TechDemo\TechDemo.Server\Mock1.db</Value>
+    </Setting>
+    <Setting Name="ServerAssemblyName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">FakeService1</Value>
     </Setting>
   </Settings>
 </SettingsFile>

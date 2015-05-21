@@ -18,7 +18,7 @@ namespace FakeService1
 
         public DbSet<DataModel> DataModel { get; set; }
 
-        public override void AddData(TechDemo.Interface.Client.AbsDataModel data)
+        public override void AddData(TechDemo.Interface.Client.DataModel data)
         {
             lock(_lock)
             {

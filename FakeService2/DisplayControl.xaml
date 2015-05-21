@@ -6,7 +6,11 @@
              xmlns:local="clr-namespace:FakeService2"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
+    <Grid Background="#FF00B9FF">
+        <Label x:Name="A" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label x:Name="AA" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,75,0,0"/>
+        <Label x:Name="AAA" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,148,0,0"/>
+        <Label x:Name="id" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,265,0,0"/>
+
     </Grid>
 </UserControl>

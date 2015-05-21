@@ -14,9 +14,9 @@ namespace FakeService2
         public DBContext(DbConnection conn) : base(conn)
         { }
 
-        public DbSet<DataModel> DataModels { get; }
+        public DbSet<DataModel> DataModels { get; set; }
 
-        public override void AddData(TechDemo.Interface.Client.AbsDataModel data)
+        public override void AddData(TechDemo.Interface.Client.DataModel data)
         {
             DataModels.Add(data as DataModel);
         }

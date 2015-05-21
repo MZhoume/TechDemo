@@ -8,6 +8,6 @@ namespace TechDemo.Interface.Server
 {
     public interface IServiceFactory
     {
-        DataService CreateService(int id, params object[] objs);
+        DataService CreateService(int id, string str);
     }
 }

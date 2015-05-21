@@ -8,7 +8,7 @@ namespace TechDemo.Interface.Client
 {
     public interface ISocketClient
     {
-        event Action<AbsDataModel[]> DataReceived;
+        event Action<DataModel[]> DataReceived;
 
         byte[] GetResponseBytes(bool isStopIntended);
 

@@ -41,23 +41,23 @@ namespace TechDemo.Client.ViewModel
         {
             _socketClient = ServiceLocator.Current.GetInstance<ISocketClient>();
             _socketClient.DataReceived += _socketClient_DataReceived;
-            Messenger.Default.Send(new GenericMessage<List<ObservableCollection<AbsDataModel>>>(DataModels));
+            Messenger.Default.Send(new GenericMessage<List<ObservableCollection<DataModel>>>(DataModels));
         }
 
-        private void _socketClient_DataReceived(AbsDataModel[] objs)
+        private void _socketClient_DataReceived(DataModel[] objs)
         {
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
                 if (objs.Length != DataModels.Count)
                 {
-                    Messenger.Default.Send(new GenericMessage<List<ObservableCollection<AbsDataModel>>>(DataModels));
+                    Messenger.Default.Send(new GenericMessage<List<ObservableCollection<DataModel>>>(DataModels));
 
                     if (objs.Length > DataModels.Count)
                     {
                         var count = objs.Length - DataModels.Count;
                         for (int i = 0; i < count; i++)
                         {
-                            DataModels.Add(new ObservableCollection<AbsDataModel>());
+                            DataModels.Add(new ObservableCollection<DataModel>());
                             DisplayControls.Add(ServiceLocator.Current.GetInstance<IDisplayControl>(Guid.NewGuid().ToString()));
                         }
                     }
@@ -127,8 +127,8 @@ namespace TechDemo.Client.ViewModel
                         {
                             ButtonString = "Start Monitoring";
                             Messenger.Default.Send("Stopped");
-                            DataModels = new List<ObservableCollection<AbsDataModel>>();
-                            Messenger.Default.Send(new GenericMessage<List<ObservableCollection<AbsDataModel>>>(this, DataModels));
+                            DataModels = new List<ObservableCollection<DataModel>>();
+                            Messenger.Default.Send(new GenericMessage<List<ObservableCollection<DataModel>>>(this, DataModels));
                         }
                         else
                         {
@@ -223,13 +223,13 @@ namespace TechDemo.Client.ViewModel
         /// </summary>
         public const string DataModelsPropertyName = "DataModel";
 
-        private List<ObservableCollection<AbsDataModel>> _dataModels = new List<ObservableCollection<AbsDataModel>>();
+        private List<ObservableCollection<DataModel>> _dataModels = new List<ObservableCollection<DataModel>>();
 
         /// <summary>
         /// Sets and gets the DataModel property.
         /// Changes to that property's value raise the PropertyChanged event. 
         /// </summary>
-        public List<ObservableCollection<AbsDataModel>> DataModels
+        public List<ObservableCollection<DataModel>> DataModels
         {
             get
             {
