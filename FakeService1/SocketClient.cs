@@ -24,9 +24,9 @@ namespace FakeService1
         private int i;
 
         public event Action<TechDemo.Interface.Client.AbsDataModel[]> DataReceived;
-        public byte[] GetResponseBytes(bool isStopIntended)
+        public byte[] GetResponseBytes()
         {
-            return new[] { (byte)(isStopIntended ? 0xff : 0x00) };
+            return new[] { (byte) 0x00 };
         }
 
         public void Parse(byte[] bytes)

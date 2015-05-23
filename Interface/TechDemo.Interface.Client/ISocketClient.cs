@@ -10,7 +10,7 @@ namespace TechDemo.Interface.Client
     {
         event Action<AbsDataModel[]> DataReceived;
 
-        byte[] GetResponseBytes(bool isStopIntended);
+        byte[] GetResponseBytes();
 
         void Parse(byte[] bytes);
     }

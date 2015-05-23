@@ -33,6 +33,7 @@ namespace TechDemo.Client.ViewModel
     {
         private bool _isMonitoring;
         private readonly ISocketClient _socketClient;
+        private Socket _socket;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -125,6 +126,13 @@ namespace TechDemo.Client.ViewModel
 
                         if (_isMonitoring)
                         {
+                            _isMonitoring = false;
+
+                            _socket.Shutdown(SocketShutdown.Both);
+                            _socket.Disconnect(false);
+                            _socket.Close();
+                            _socket = null;
+
                             ButtonString = "Start Monitoring";
                             Messenger.Default.Send("Stopped");
                             DataModels = new List<ObservableCollection<AbsDataModel>>();
@@ -132,65 +140,63 @@ namespace TechDemo.Client.ViewModel
                         }
                         else
                         {
-                            Task.Factory.StartNew(() =>
+                            _isMonitoring = true;
+
+                            _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                            var ipAddress = System.Net.IPAddress.Parse(IPAddress);
+                            var endPoint = new IPEndPoint(ipAddress, int.Parse(Port));
+
+                            try
                             {
-                                using (var socket = new Socket(
-                                    AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
-                                {
-                                    var ipAddress = System.Net.IPAddress.Parse(IPAddress);
-                                    var endPoint = new IPEndPoint(ipAddress, int.Parse(Port));
-
-                                    try
-                                    {
-                                        socket.Connect(endPoint);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        _isMonitoring = true;
-                                        _toggleMonitoring.Execute(null);
-                                        MessageBox.Show(ex.Message);
-                                    }
-
-                                    socket.Blocking = true;
-
-                                    Debug.WriteLine(
-                                        $"Connected to {endPoint.Address}:{endPoint.Port}");
-
-                                    byte[] b, buf = new byte[100];
-                                    while (_isMonitoring)
-                                    {
-                                        try
-                                        {
-                                            b = _socketClient.GetResponseBytes(false);
-                                            socket.Send(b);
-
-                                            socket.Receive(buf);
-                                            _socketClient.Parse(buf);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            _isMonitoring = false;
-                                            _toggleMonitoring.Execute(null);
-
-                                            MessageBox.Show(ex.Message);
-                                        }
-                                    }
-                                    if (_isMonitoring)
-                                    {
-                                        b = _socketClient.GetResponseBytes(true);
-
-                                        socket.Send(b);
-                                    }
-                                }
-                            });
+                                _socket.BeginConnect(endPoint, ConnectedCallback, _socket);
+                            }
+                            catch (Exception ex)
+                            {
+                                _isMonitoring = false;
+                                _toggleMonitoring.Execute(null);
+                                MessageBox.Show(ex.Message);
+                            }
 
                             ButtonString = "Stop Monitoring";
                         }
-
-                        _isMonitoring = !_isMonitoring;
                     }, () =>
                     !(string.IsNullOrEmpty(_ipAddress) || string.IsNullOrEmpty(_port))));
             }
+        }
+
+        private void ConnectedCallback(IAsyncResult ar)
+        {
+            var socket = ar.AsyncState as Socket;
+            socket.EndConnect(ar);
+
+            Debug.WriteLine(
+                $"Connected to {socket.RemoteEndPoint}");
+
+            var b = _socketClient.GetResponseBytes();
+            socket.BeginSend(b, 0, b.Length, SocketFlags.None, SendCallback, socket);
+        }
+
+        private void SendCallback(IAsyncResult ar)
+        {
+            var sendSoc = ar.AsyncState as Socket;
+            sendSoc.EndSend(ar);
+
+            var buf = new byte[500];
+            sendSoc.BeginReceive(buf, 0, buf.Length, SocketFlags.None, receiveRes =>
+            {
+                if (!_isMonitoring)
+                {
+                    return;
+                }
+
+                var receiveSoc = receiveRes.AsyncState as Socket;
+                receiveSoc.EndReceive(receiveRes);
+
+                _socketClient.Parse(buf);
+
+                var b = _socketClient.GetResponseBytes();
+                _socket.BeginSend(b, 0, b.Length, SocketFlags.None, SendCallback, _socket);
+            }, _socket);
         }
 
         /// <summary>

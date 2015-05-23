@@ -37,7 +37,6 @@ namespace TechDemo.Server.ViewModel
 
         private readonly List<AbsDataModel>[] _dataModels;
 
-        private readonly List<Socket> _clientsToDelete = new List<Socket>();
         private readonly List<Socket> _clients = new List<Socket>();
 
         /// <summary>
@@ -68,7 +67,6 @@ namespace TechDemo.Server.ViewModel
             _dataModels[obj.ServerID].Add(obj);
 
             _dbContext.AddData(obj);
-
             _dbContext.SaveChangesAsync();
 
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
@@ -76,51 +74,56 @@ namespace TechDemo.Server.ViewModel
                 ServerLogs.Add($"Got new info at {DateTime.Now.ToLongTimeString()} from server {obj.ServerID}");
             });
 
-            if (_isListening)
+            if (!_isListening)
+                return;
+
+            for (int i = 0; i < _clients.Count; i++)
             {
-                foreach (var c in _clients)
+                byte[] b;
+                if (_clients[i].Available == 0)
                 {
-                    if (c.Available == 0)
+                    b = new byte[100];
+                    try
                     {
-                        if (!c.Connected)
-                        {
-                            _clientsToDelete.Add(c);
-                        }
-                        continue;
+                        _clients[i].Receive(b);
                     }
-                    var b = new byte[c.Available];
-                    c.Receive(b);
-                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    catch
                     {
-                        ServerLogs.Add($"Received -- {b[0]}");
-                    });
+                        _clients[i].Disconnect(false);
+                        _clients[i].Close();
+                        _clients[i].Dispose();
 
-                    if (_socketServer.IsStopIntended(b))
-                    {
+                        _clients.Remove(_clients[i]);
+                        i--;
+
                         DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                        {
-                            ServerLogs.Add("Ending...");
-                        });
-                        _clientsToDelete.Add(c);
+                            ServerLogs.Add("Client has disconnected."));
                         continue;
                     }
-
-                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                    {
-                        ServerLogs.Add($"Send -- {b[0]}");
-                    });
-                    c.Send(_socketServer.GenerateBytes(_dataModels.Select(d => d.Last()).ToArray()));
                 }
-
-                foreach (var c in _clientsToDelete)
+                else
                 {
-                    _clients.Remove(c);
-                    c.Close();
-
-                    DispatcherHelper.CheckBeginInvokeOnUI(()=>
-                        ServerLogs.Add("Client has disconnected."));
+                    b = new byte[_clients[i].Available];
+                    _clients[i].Receive(b);
                 }
+
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    ServerLogs.Add($"Received -- {b[0]}");
+                });
+
+                var buf = _socketServer.GenerateBytes(_dataModels.Select(d => d.Last()).ToArray());
+                _clients[i].BeginSend(buf, 0, buf.Length, SocketFlags.None, SendCallback, _clients[i]);
             }
+        }
+
+        private void SendCallback(IAsyncResult ar)
+        {
+            var soc = ar.AsyncState as Socket;
+            soc.EndSend(ar);
+
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                ServerLogs.Add($"Send data"));
         }
 
         private bool _isListening;
@@ -145,59 +148,48 @@ namespace TechDemo.Server.ViewModel
 
                             if (_isListening)
                             {
+                                _isListening = false;
+
+                                _clients.Clear();
+
                                 _socket.Close();
+                                _socket.Dispose();
+
                                 ListenBtnString = "Start Listening";
                             }
                             else
                             {
-                                Task.Factory.StartNew(() =>
+                                _isListening = true;
+
+                                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                                var ipAddr = System.Net.IPAddress.Parse(IPAddress);
+                                var endPoint = new IPEndPoint(ipAddr, int.Parse(Port));
+
+                                _socket.Bind(endPoint);
+                                _socket.Listen(0);
+
+                                DispatcherHelper.CheckBeginInvokeOnUI(() =>
                                 {
-                                    using (_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream,
-                                        ProtocolType.Tcp))
-                                    {
-                                        var ipAddr = System.Net.IPAddress.Parse(IPAddress);
-                                        var endPoint = new IPEndPoint(ipAddr, int.Parse(Port));
+                                    ServerLogs.Add($"Server starts listening on {endPoint.Address}:{endPoint.Port}");
 
-                                        _socket.Bind(endPoint);
-                                        _socket.Listen(0);
-
-                                        DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                                        {
-                                            ServerLogs.Add($"Server starts listening on {endPoint.Address}:{endPoint.Port}");
-
-                                        });
-
-                                        while (true)
-                                        {
-                                            try
-                                            {
-                                                var c = _socket.Accept();
-                                                _clients.Add(c);
-
-                                                DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                                                    ServerLogs.Add("Client has connected."));
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                                                {
-                                                    ServerLogs.Add(ex.Message);
-                                                    ServerLogs.Add(
-                                                        $"Server stopped listening at {DateTime.Now.ToShortTimeString()}");
-                                                });
-                                                break;
-                                            }
-                                        }
-                                    }
                                 });
+
+                                _socket.BeginAccept(AcceptCallback, null);
 
                                 ListenBtnString = "Stop Listening";
                             }
-
-                            _isListening = !_isListening;
                         }, () =>
                         !(string.IsNullOrEmpty(_ipAddress) || string.IsNullOrEmpty(_port))));
             }
+        }
+
+        private void AcceptCallback(IAsyncResult ar)
+        {
+            var c = _socket.EndAccept(ar);
+            _clients.Add(c);
+
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                ServerLogs.Add("Client has connected."));
         }
 
         /// <summary>
