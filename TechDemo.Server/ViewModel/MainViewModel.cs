@@ -12,6 +12,7 @@ using Microsoft.Practices.ServiceLocation;
 using TechDemo.Interface.Client;
 using TechDemo.Interface.Server;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Threading;
 using GalaSoft.MvvmLight.Threading;
 
@@ -169,10 +170,7 @@ namespace TechDemo.Server.ViewModel
                                 _socket.Listen(0);
 
                                 DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                                {
-                                    ServerLogs.Add($"Server starts listening on {endPoint.Address}:{endPoint.Port}");
-
-                                });
+                                    ServerLogs.Add($"Server starts listening on {endPoint.Address}:{endPoint.Port}"));
 
                                 _socket.BeginAccept(AcceptCallback, null);
 
@@ -185,11 +183,23 @@ namespace TechDemo.Server.ViewModel
 
         private void AcceptCallback(IAsyncResult ar)
         {
-            var c = _socket.EndAccept(ar);
-            _clients.Add(c);
+            try
+            {
+                var c = _socket.EndAccept(ar);
+                _clients.Add(c);
+            }
+            catch
+            {
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    ServerLogs.Add("Server stopped listening..."));
+
+                return;
+            }
 
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
                 ServerLogs.Add("Client has connected."));
+
+            _socket.BeginAccept(AcceptCallback, null);
         }
 
         /// <summary>

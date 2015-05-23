@@ -19,9 +19,9 @@ namespace FakeService2
         {
             DataReceived?.Invoke(new []
             {
-                new DataModel(0) {AA = 2},
-                new DataModel(1) {AA = 2},
-                new DataModel(2) {AA = 2},
+                new DataModel(0) {Values = new double[] {10,11,12}},
+                new DataModel(1) {Values = new double[] {10,11,12}},
+                new DataModel(2) {Values = new double[] {10,11,12}},
             });
         }
     }

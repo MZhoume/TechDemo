@@ -22,7 +22,19 @@ namespace FakeService2
             A = bytes[0];
             AA = bytes[1];
             AAA = bytes[2];
+
+            Values = new double[]
+            {
+                A,AA,AAA,
+            };
         }
+
+        public override string[] Names { get; set; } = 
+        {
+            "A","AA","AAA"
+        };
+
+        public override double[] Values { get; set; }
 
         public int A { get; set; }
 
@@ -30,18 +42,7 @@ namespace FakeService2
 
         public int AAA { get; set; }
 
-        public override Dictionary<string, double> ValuesToDraw
-        {
-            get
-            {
-                return new Dictionary<string, double>()
-                {
-                    ["A"] = A,
-                    ["AA"] = AA,
-                    ["AAA"] = AAA,
-                };
-            }
-        }
+
 
         public DataModel(int id) : base(id)
         {}

@@ -26,6 +26,8 @@ namespace TechDemo.Interface.Client
 
         public int ServerID { get; private set; }
 
-        public abstract Dictionary<string, double> ValuesToDraw { get; } 
+        public abstract string[] Names { get; set; }
+
+        public abstract double[] Values { get; set; }
     }
 }

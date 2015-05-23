@@ -21,7 +21,10 @@ namespace FakeService1
         {
             MessageBox.Show($"Creating service at {portName}");
 
-            _models = new List<DataModel>() {new DataModel(ID) {I = 100} };
+            _models = new List<DataModel>() {new DataModel(ID)
+            {
+                Values = new double[]{0,1,2}
+            } };
             var timer = new Timer(3000);
             timer.Elapsed += Timer_Elapsed;
 
@@ -30,11 +33,17 @@ namespace FakeService1
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            DataArrived?.Invoke(new DataModel(ID) {I = 100});
+            DataArrived?.Invoke(new DataModel(ID)
+            {
+                Values = new double[] { 0, 1, 2 }
+            });
 
             if (i++ == 5)
             {
-                _models.Add(new DataModel(ID) {I = i*10});
+                _models.Add(new DataModel(ID)
+                {
+                    Values = new double[] { 0, 1, 2 }
+                });
                 i = 0;
             }
         }

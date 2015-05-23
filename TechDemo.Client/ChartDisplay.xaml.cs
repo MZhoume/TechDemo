@@ -54,16 +54,12 @@ namespace TechDemo.Client
                     Source = new Uri($"/Chart.xaml#{i.ToString()}", UriKind.Relative)
                 });
             }
-
-            if (count>0)
-            {
-                modernTab.SelectedSource = new Uri($"/Chart.xaml#0", UriKind.Relative);
-            }
         }
 
         public void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
             modernTab.Links.Clear();
+            modernTab.SelectedSource = null;
         }
     }
 }

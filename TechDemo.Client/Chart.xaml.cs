@@ -33,7 +33,6 @@ namespace TechDemo.Client
     {
         private ObservableDataSource<Point>[] _points;
         private int _dataCount;
-        private string[] _keys;
         private int _time;
         private ObservableCollection<AbsDataModel> _list;
         private LineGraph[] _graphs = new LineGraph[0];
@@ -62,13 +61,11 @@ namespace TechDemo.Client
             var num = int.Parse(e.Fragment);
             _list = (Application.Current.Properties["DataModels"] as List<ObservableCollection<AbsDataModel>>)[num];
 
-            var model = _list[0].ValuesToDraw;
-            _dataCount = model.Count;
-            _keys = new string[_dataCount];
+            var names = _list[0].Names;
+            _dataCount = names.Length;
 
             _points = new ObservableDataSource<Point>[_dataCount];
-
-            model.Keys.CopyTo(_keys, 0);
+            
             var points = new Point[_dataCount][];
 
             for (int i = 0; i < _dataCount; i++)
@@ -80,7 +77,7 @@ namespace TechDemo.Client
             {
                 for (int j = 0; j < _dataCount; j++)
                 {
-                    points[j][_time] = new Point(_time, _list[_time].ValuesToDraw[_keys[j]]);
+                    points[j][_time] = new Point(_time, _list[_time].Values[j]);
                 }
             }
 
@@ -91,7 +88,7 @@ namespace TechDemo.Client
                 var i1 = i;
 
                 _points[i1] = new ObservableDataSource<Point>(points[i1]);
-                _graphs[i1] = plotter.AddLineGraph(_points[i1], _keys[i1]);
+                _graphs[i1] = plotter.AddLineGraph(_points[i1], names[i1]);
             }
 
             plotter.FitToView();
@@ -105,7 +102,7 @@ namespace TechDemo.Client
             for (int i = 0; i < _dataCount; i++)
             {
                 var i1 = i;
-                _points[i1].AppendAsync(DispatcherHelper.UIDispatcher, new Point(_time, data.ValuesToDraw[_keys[i1]]));
+                _points[i1].AppendAsync(DispatcherHelper.UIDispatcher, new Point(_time, data.Values[i1]));
             }
 
             _time++;

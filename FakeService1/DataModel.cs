@@ -29,15 +29,19 @@ namespace FakeService1
             I = bytes[0];
             II = bytes[1];
             III = bytes[2];
+
+            Values = new double[]
+            {
+                I,II,III,
+            };
         }
 
-        public override Dictionary<string, double> ValuesToDraw => 
-            new Dictionary<string, double>()
+        public override string[] Names { get; set; } =
         {
-            ["I"]=I,
-            ["II"]=II,
-            ["III"]=III,
+            "I","II","III"
         };
+
+        public override double[] Values { get; set; }
 
         public DataModel(int id) : base(id)
         {}
