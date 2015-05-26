@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using FirstFloor.ModernUI.Windows;
 using TechDemo.Client.ViewModel;
+using TechDemo.Interface.Client;
 using FragmentNavigationEventArgs = FirstFloor.ModernUI.Windows.Navigation.FragmentNavigationEventArgs;
 using NavigatingCancelEventArgs = FirstFloor.ModernUI.Windows.Navigation.NavigatingCancelEventArgs;
 using NavigationEventArgs = FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs;
@@ -25,6 +26,8 @@ namespace TechDemo.Client
     /// </summary>
     public partial class DataControl : UserControl, IContent
     {
+        private AbsDisplayControl _control;
+
         public DataControl()
         {
             InitializeComponent();
@@ -33,12 +36,11 @@ namespace TechDemo.Client
         public void OnFragmentNavigation(FragmentNavigationEventArgs e)
         {
             var pos = int.Parse(e.Fragment);
-            var control = (Application.Current.Resources["Locator"] as ViewModelLocator)?.Main.DisplayControls[pos];
+            _control = (Application.Current.Resources["Locator"] as ViewModelLocator)?.Main.DisplayControls[pos];
 
-            if (control != null)
+            if (_control != null)
             {
-                control.Margin = new Thickness(5, 5, 5, 5);
-                viewer.Content = control;
+                viewer.Content = _control;
             }
         }
 

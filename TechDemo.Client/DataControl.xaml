@@ -7,8 +7,5 @@
              xmlns:local="clr-namespace:TechDemo.Client"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Style="{StaticResource ContentRoot}">
-        <ScrollViewer Margin="{StaticResource SplitLeft}" x:Name="viewer">
-        </ScrollViewer>
-    </Grid>
+    <ScrollViewer x:Name="viewer"/>
 </UserControl>

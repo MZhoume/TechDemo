@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              DataContext="{Binding Main, Source={StaticResource Locator}}">
-    <Grid Style="{StaticResource ContentRoot}">
+    <Grid>
         <ScrollViewer>
             <StackPanel>
                 <TextBlock Text="Introduction" Style="{StaticResource Heading2}" />

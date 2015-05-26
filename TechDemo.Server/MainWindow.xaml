@@ -6,5 +6,12 @@
         xmlns:mui="http://firstfloorsoftware.com/ModernUI"
         xmlns:local="clr-namespace:TechDemo.Server"
         mc:Ignorable="d" ContentSource="/ServerControl.xaml"
-        Title="MainWindow" Height="480" Width="640">
+        Title="Server" IsTitleVisible="True" Height="480" Width="640">
+    <mui:ModernWindow.MenuLinkGroups>
+        <mui:LinkGroup DisplayName="Welcome">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Server Management" Source="/ServerControl.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+    </mui:ModernWindow.MenuLinkGroups>
 </mui:ModernWindow>

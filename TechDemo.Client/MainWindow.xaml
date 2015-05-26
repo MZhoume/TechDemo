@@ -6,7 +6,7 @@
         xmlns:mui="http://firstfloorsoftware.com/ModernUI"
         xmlns:local="clr-namespace:TechDemo.Client"
         mc:Ignorable="d" ContentSource="/Introduction.xaml"
-        Title="MainWindow" Height="480" Width="640"
+        Title="Client" IsTitleVisible="True" Height="480" Width="640"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="Settings" Source="/Settings.xaml" />
