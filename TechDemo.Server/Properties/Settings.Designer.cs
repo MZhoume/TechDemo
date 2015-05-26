@@ -58,5 +58,26 @@ namespace TechDemo.Server.Properties {
                 return ((string)(this["ServerAssemblyName"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("This is an introduction from server...")]
+        public string Introduction {
+            get {
+                return ((string)(this["Introduction"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("This is not using for now...")]
+        public string Directive {
+            get {
+                return ((string)(this["Directive"]));
+            }
+            set {
+                this["Directive"] = value;
+            }
+        }
     }
 }

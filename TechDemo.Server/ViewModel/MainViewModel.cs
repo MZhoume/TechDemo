@@ -13,8 +13,12 @@ using TechDemo.Interface.Client;
 using TechDemo.Interface.Server;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Text;
 using System.Threading;
+using Fleck;
 using GalaSoft.MvvmLight.Threading;
+using Newtonsoft.Json;
+using TechDemo.Server.Model;
 
 namespace TechDemo.Server.ViewModel
 {
@@ -35,10 +39,15 @@ namespace TechDemo.Server.ViewModel
         private readonly AbsDataService[] _dataServices;
         private readonly AbsDBContext _dbContext;
         private readonly ISocketServer _socketServer;
+        private Socket _socket;
+        private WebSocketServer _webSocket;
 
         private readonly List<AbsDataModel>[] _dataModels;
 
         private readonly List<Socket> _clients = new List<Socket>();
+        private readonly List<IWebSocketConnection> _webClients = new List<IWebSocketConnection>(); 
+
+        private bool _isListening;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -78,6 +87,22 @@ namespace TechDemo.Server.ViewModel
             if (!_isListening)
                 return;
 
+            SendToSocket();
+            SendToWebSocket();
+        }
+
+        private void SendToWebSocket()
+        {
+            var res = JsonConvert.SerializeObject(_dataModels.Select(m => m.Last()).ToArray());
+
+            foreach (var c in _webClients)
+            {
+                c.Send(res);
+            }
+        }
+
+        private void SendToSocket()
+        {
             for (int i = 0; i < _clients.Count; i++)
             {
                 byte[] b;
@@ -108,10 +133,7 @@ namespace TechDemo.Server.ViewModel
                     _clients[i].Receive(b);
                 }
 
-                DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                {
-                    ServerLogs.Add($"Received -- {b[0]}");
-                });
+                DispatcherHelper.CheckBeginInvokeOnUI(() => { ServerLogs.Add($"Received -- {b[0]}"); });
 
                 var buf = _socketServer.GenerateBytes(_dataModels.Select(d => d.Last()).ToArray());
                 _clients[i].BeginSend(buf, 0, buf.Length, SocketFlags.None, SendCallback, _clients[i]);
@@ -127,8 +149,6 @@ namespace TechDemo.Server.ViewModel
                 ServerLogs.Add($"Send data"));
         }
 
-        private bool _isListening;
-        private Socket _socket;
         private RelayCommand _startListenCommand;
 
         /// <summary>
@@ -152,7 +172,9 @@ namespace TechDemo.Server.ViewModel
                                 _isListening = false;
 
                                 _clients.Clear();
+                                _webClients.Clear();
 
+                                _webSocket.Dispose();
                                 _socket.Close();
                                 _socket.Dispose();
 
@@ -162,6 +184,61 @@ namespace TechDemo.Server.ViewModel
                             {
                                 _isListening = true;
 
+                                var intro = new
+                                {
+                                    introduction = Properties.Settings.Default.Introduction,
+                                    directive = ""
+                                };
+
+                                var res = JsonConvert.SerializeObject(intro);
+
+                                var webPort = (int.Parse(Port) + 80).ToString();
+                                _webSocket = new WebSocketServer("ws://" + IPAddress + ":" + webPort);
+
+                                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                                    ServerLogs.Add($"WebSocket starts on {DateTime.Now.ToShortTimeString()}"));
+
+                                _webSocket.Start(c =>
+                                {
+                                    c.OnOpen = () =>
+                                    {
+                                        DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                                            ServerLogs.Add("A web client has connected."));
+
+                                        c.Send(res);
+                                        _webClients.Add(c);
+                                    };
+
+                                    c.OnClose = () =>
+                                    {
+                                        DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                                            ServerLogs.Add("A web client has disconnected."));
+                                        _webClients.Remove(c);
+                                    };
+
+                                    c.OnError = ex =>
+                                    {
+                                        DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                                            ServerLogs.Add(ex.Message));
+                                        c.Close();
+                                    };
+
+                                    c.OnPing = bytes => c.SendPong(bytes);
+                                    c.OnPong = bytes => c.SendPing(bytes);
+
+                                    c.OnMessage = s =>
+                                    {
+                                        DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                                            ServerLogs.Add($"Got websocket message at {DateTime.Now.ToShortTimeString()}"));
+
+                                        var req = JsonConvert.DeserializeObject(s, typeof(WebSocketClient)) as WebSocketClient;
+                                        if (req.isStopIntended)
+                                        {
+                                            c.Close();
+                                        }
+                                    };
+                                });
+                                
                                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                                 var ipAddr = System.Net.IPAddress.Parse(IPAddress);
                                 var endPoint = new IPEndPoint(ipAddr, int.Parse(Port));
@@ -176,8 +253,7 @@ namespace TechDemo.Server.ViewModel
 
                                 ListenBtnString = "Stop Listening";
                             }
-                        }, () =>
-                        !(string.IsNullOrEmpty(_ipAddress) || string.IsNullOrEmpty(_port))));
+                        }, () => !(string.IsNullOrEmpty(_ipAddress) || string.IsNullOrEmpty(_port))));
             }
         }
 
@@ -186,6 +262,10 @@ namespace TechDemo.Server.ViewModel
             try
             {
                 var c = _socket.EndAccept(ar);
+
+                var intro = Encoding.UTF8.GetBytes(Properties.Settings.Default.Introduction);
+                c.BeginSend(intro,0,intro.Length,SocketFlags.None, SendCallback, c);
+
                 _clients.Add(c);
             }
             catch

@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight;
@@ -172,7 +174,14 @@ namespace TechDemo.Client.ViewModel
             Debug.WriteLine(
                 $"Connected to {socket.RemoteEndPoint}");
 
-            var b = _socketClient.GetResponseBytes();
+            while (socket.Available == 0)
+            {}
+            var b = new byte[socket.Available];
+            socket.Receive(b);
+            var intro = Encoding.UTF8.GetString(b);
+            Introduction = intro;
+
+            b = _socketClient.GetResponseBytes();
             socket.BeginSend(b, 0, b.Length, SocketFlags.None, SendCallback, socket);
         }
 
@@ -288,6 +297,29 @@ namespace TechDemo.Client.ViewModel
             set
             {
                 Set(() => DisplayControls, ref _displayControls, value);
+            }
+        }
+
+        /// <summary>
+        /// The <see cref="Introduction" /> property's name.
+        /// </summary>
+        public const string IntroductionPropertyName = "Introduction";
+
+        private string _introduction = "";
+
+        /// <summary>
+        /// Sets and gets the Introduction property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public string Introduction
+        {
+            get
+            {
+                return _introduction;
+            }
+            set
+            {
+                Set(() => Introduction, ref _introduction, value);
             }
         }
 
