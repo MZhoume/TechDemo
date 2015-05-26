@@ -54,6 +54,11 @@ namespace TechDemo.Client
                     Source = new Uri($"/Chart.xaml#{i.ToString()}", UriKind.Relative)
                 });
             }
+
+            if (count > 0)
+            {
+                modernTab.SelectedSource = modernTab.Links[0].Source;
+            }
         }
 
         public void OnNavigatingFrom(NavigatingCancelEventArgs e)
