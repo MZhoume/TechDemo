@@ -11,18 +11,6 @@ namespace FakeService1
 {
     public class SocketClient : ISocketClient
     {
-        public SocketClient()
-        {
-            var timer = new Timer(1000);
-            timer.Elapsed += (sender, args) =>
-             {
-                 Parse(null);
-             };
-            timer.Start();
-        }
-
-        private int i;
-
         public event Action<TechDemo.Interface.Client.AbsDataModel[]> DataReceived;
         public byte[] GetResponseBytes()
         {

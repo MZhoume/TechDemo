@@ -43,7 +43,7 @@ namespace TechDemo.Client.ViewModel
                 try
                 {
                     var assembly = Assembly.Load(Properties.Settings.Default.AssemblyName);
-                    SimpleIoc.Default.Register(() => assembly.CreateInstance(Properties.Settings.Default.AssemblyName+".DisplayControl") as IDisplayControl);
+                    SimpleIoc.Default.Register(() => assembly.CreateInstance(Properties.Settings.Default.AssemblyName+".DisplayControl") as AbsDisplayControl);
                     SimpleIoc.Default.Register(() => assembly.CreateInstance(Properties.Settings.Default.AssemblyName + ".DataModel") as AbsDataModel);
                     SimpleIoc.Default.Register(() => assembly.CreateInstance(Properties.Settings.Default.AssemblyName + ".SocketClient") as ISocketClient);
                 }

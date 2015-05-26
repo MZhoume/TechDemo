@@ -19,14 +19,14 @@ namespace FakeService2
     /// <summary>
     /// DisplayControl.xaml 的交互逻辑
     /// </summary>
-    public partial class DisplayControl : IDisplayControl
+    public partial class DisplayControl : AbsDisplayControl
     {
         public DisplayControl()
         {
             InitializeComponent();
         }
 
-        public void PopulateData(TechDemo.Interface.Client.AbsDataModel data)
+        public override void PopulateData(TechDemo.Interface.Client.AbsDataModel data)
         {
             var dat = data as DataModel;
 

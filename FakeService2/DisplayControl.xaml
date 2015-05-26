@@ -1,8 +1,9 @@
-﻿<UserControl x:Class="FakeService2.DisplayControl"
+﻿<client:AbsDisplayControl x:Class="FakeService2.DisplayControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:client="clr-namespace:TechDemo.Interface.Client;assembly=TechDemo.Interface.Client"
              xmlns:local="clr-namespace:FakeService2"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -13,4 +14,4 @@
         <Label x:Name="id" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,265,0,0"/>
 
     </Grid>
-</UserControl>
+</client:AbsDisplayControl>

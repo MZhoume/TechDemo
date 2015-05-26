@@ -33,10 +33,13 @@ namespace TechDemo.Client
         public void OnFragmentNavigation(FragmentNavigationEventArgs e)
         {
             var pos = int.Parse(e.Fragment);
-            var control = (Application.Current.Resources["Locator"] as ViewModelLocator).Main.DisplayControls[pos];
-            
-            (control as UserControl).Margin = new Thickness(5, 5, 5, 5);
-            viewer.Content = control;
+            var control = (Application.Current.Resources["Locator"] as ViewModelLocator)?.Main.DisplayControls[pos];
+
+            if (control != null)
+            {
+                control.Margin = new Thickness(5, 5, 5, 5);
+                viewer.Content = control;
+            }
         }
 
         public void OnNavigatedFrom(NavigationEventArgs e)

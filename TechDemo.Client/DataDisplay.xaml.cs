@@ -45,8 +45,8 @@ namespace TechDemo.Client
         public void OnNavigatedTo(NavigationEventArgs e)
         {
             modernTab.Layout = (TabLayout)Application.Current.Properties["Layout"];
-            var controls = (Application.Current.Resources["Locator"] as ViewModelLocator).Main.DisplayControls;
-            var count = controls.Count;
+            var controls = (Application.Current.Resources["Locator"] as ViewModelLocator)?.Main.DisplayControls;
+            var count = controls?.Count;
 
             for (int i = 0; i < count; i++)
             {

@@ -61,7 +61,7 @@ namespace TechDemo.Client.ViewModel
                         for (int i = 0; i < count; i++)
                         {
                             DataModels.Add(new ObservableCollection<AbsDataModel>());
-                            DisplayControls.Add(ServiceLocator.Current.GetInstance<IDisplayControl>(Guid.NewGuid().ToString()));
+                            DisplayControls.Add(ServiceLocator.Current.GetInstance<AbsDisplayControl>(Guid.NewGuid().ToString()));
                         }
                     }
                     else
@@ -282,13 +282,13 @@ namespace TechDemo.Client.ViewModel
         /// </summary>
         public const string DisplayControlsPropertyName = "DisplayControls";
 
-        private ObservableCollection<IDisplayControl> _displayControls = new ObservableCollection<IDisplayControl>();
+        private ObservableCollection<AbsDisplayControl> _displayControls = new ObservableCollection<AbsDisplayControl>();
 
         /// <summary>
         /// Sets and gets the DisplayControls property.
         /// Changes to that property's value raise the PropertyChanged event. 
         /// </summary>
-        public ObservableCollection<IDisplayControl> DisplayControls
+        public ObservableCollection<AbsDisplayControl> DisplayControls
         {
             get
             {
