@@ -4,30 +4,55 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using TechDemo.Interface.Client;
 
 namespace TempDect
 {
-    public class DataService : TechDemo.Interface.Server.AbsDataService, IDisposable
+    public sealed class DataService : TechDemo.Interface.Server.AbsDataService, IDisposable
     {
-        private SerialPort _serialPort;
+        private readonly SerialPort _serialPort;
+        private DataModel _dm;
+
+        private int i;
 
         public DataService(int id, string com) : base(id)
         {
-            _serialPort = new SerialPort(com);
-            _serialPort.DataReceived += (sender, args) =>
+            //_serialPort = new SerialPort(com);
+            //_serialPort.DataReceived += (sender, args) =>
+            //{
+            //    if (args.EventType == SerialData.Eof)
+            //    {
+            //        var b = new byte[_serialPort.BytesToRead];
+            //        _serialPort.Read(b, 0, _serialPort.BytesToRead);
+
+            //        if (_dm.Parse(b))
+            //        {
+            //            DataArrived?.Invoke(_dm);
+            //            _dm = new DataModel(id);
+            //        }
+            //    }
+            //};
+
+            //_dm = new DataModel(id);
+
+            //_serialPort.Open();
+
+            var timer = new Timer(3000);
+            timer.Elapsed += (s, e) =>
             {
-                if (args.EventType == SerialData.Eof)
+                DataArrived?.Invoke(new DataModel(id)
                 {
-                    var b = new byte[_serialPort.BytesToRead];
-                    _serialPort.Read(b, 0, _serialPort.BytesToRead);
-                    var dm = new DataModel(id);
-                    dm.Parse(b);
-;                    DataArrived?.Invoke(dm);
-                }
+                    Temperature = i++,
+                    Gas = i++,
+                    Light = i++,
+                    Lamp = i % 2,
+                    Alert = i % 2 + 1,
+                    Datetime = DateTime.Now.ToString("s")
+                });
             };
 
-            _serialPort.Open();
+            timer.Start();
         }
 
         public override event Action<AbsDataModel> DataArrived;
@@ -35,7 +60,7 @@ namespace TempDect
         #region IDisposable Support
         private bool disposedValue = false;
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!disposedValue)
             {

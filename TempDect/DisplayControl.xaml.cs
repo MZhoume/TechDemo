@@ -28,7 +28,12 @@ namespace TempDect
 
         public override void PopulateData(AbsDataModel data)
         {
-            throw new NotImplementedException();
+            var dat = data as DataModel;
+            tempBar.Value = dat.Temperature;
+            lblGas.Content = dat.Gas;
+            lblLight.Content = dat.Light;
+            rbLamp.IsChecked = dat.Lamp > 0;
+            rbAlert.IsChecked = dat.Alert > 0;
         }
     }
 }

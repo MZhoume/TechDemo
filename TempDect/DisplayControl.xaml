@@ -1,13 +1,118 @@
-﻿<client:AbsDisplayControl x:Class="TempDect.DisplayControl"
+﻿<client:AbsDisplayControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:client="clr-namespace:TechDemo.Interface.Client;assembly=TechDemo.Interface.Client"
              xmlns:local="clr-namespace:TempDect"
+             x:Class="TempDect.DisplayControl"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
+             d:DesignHeight="200" d:DesignWidth="400">
+    <client:AbsDisplayControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Simple Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="FocusVisual">
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <SolidColorBrush x:Key="RadioButton.Static.Background" Color="#FFFFFFFF"/>
+            <SolidColorBrush x:Key="RadioButton.Static.Border" Color="#FF707070"/>
+            <Style x:Key="OptionMarkFocusVisual">
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <SolidColorBrush x:Key="RadioButton.MouseOver.Background" Color="#FFF3F9FF"/>
+            <SolidColorBrush x:Key="RadioButton.MouseOver.Border" Color="#FF5593FF"/>
+            <SolidColorBrush x:Key="RadioButton.MouseOver.Glyph" Color="#FF212121"/>
+            <SolidColorBrush x:Key="RadioButton.Disabled.Background" Color="#FFE6E6E6"/>
+            <SolidColorBrush x:Key="RadioButton.Disabled.Border" Color="#FFBCBCBC"/>
+            <SolidColorBrush x:Key="RadioButton.Disabled.Glyph" Color="#FF707070"/>
+            <SolidColorBrush x:Key="RadioButton.Pressed.Background" Color="#FFD9ECFF"/>
+            <SolidColorBrush x:Key="RadioButton.Pressed.Border" Color="#FF3C77DD"/>
+            <SolidColorBrush x:Key="RadioButton.Pressed.Glyph" Color="#FF212121"/>
+            <SolidColorBrush x:Key="RadioButton.Static.Glyph" Color="#FF212121"/>
+            <Style x:Key="RadioButtonStyle1" TargetType="{x:Type RadioButton}">
+                <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+                <Setter Property="Background" Value="{StaticResource RadioButton.Static.Background}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource RadioButton.Static.Border}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RadioButton}">
+                            <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True" Margin="0,0,-15.138,3.167">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border x:Name="radioButtonBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="100" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1,1,-18.656,-27.26" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Grid.ColumnSpan="2" Height="52" Width="52">
+                                    <Grid x:Name="markGrid" Margin="2">
+                                        <Ellipse x:Name="optionMark" MinWidth="6" MinHeight="6" Opacity="0" Fill="#FF8BFF00"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="HasContent" Value="true">
+                                    <Setter Property="FocusVisualStyle" Value="{StaticResource OptionMarkFocusVisual}"/>
+                                    <Setter Property="Padding" Value="4,-1,0,0"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="true">
+                                    <Setter Property="Opacity" TargetName="optionMark" Value="1"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="{x:Null}">
+                                    <Setter Property="Opacity" TargetName="optionMark" Value="0.56"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </client:AbsDisplayControl.Resources>
+    <Grid Background="White">
+        <Ellipse Fill="Red" HorizontalAlignment="Left" Margin="39.562,172.5,0,10" Width="17.5" Stroke="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" VerticalAlignment="Top" Height="17.5"/>
+        <ProgressBar x:Name="tempBar" HorizontalAlignment="Left" Style="{DynamicResource SimpleProgressBar}" Width="162" Margin="-32.406,86.308,0,0" RenderTransformOrigin="0.5,0.5" Foreground="Red" Height="12.95" VerticalAlignment="Top">
+            <ProgressBar.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </ProgressBar.RenderTransform>
+        </ProgressBar>
+        <StackPanel HorizontalAlignment="Left" Margin="6.558,10.5,0,21.5" Width="32.667">
+            <Label x:Name="label" Content="100" HorizontalAlignment="Right" Style="{DynamicResource SimpleLabel}" Margin="0,0,0,4.5" FontSize="8.667"/>
+            <Label x:Name="label_Copy9" Content="90" HorizontalAlignment="Right" Style="{DynamicResource SimpleLabel}" Margin="0,0,0,4.5" FontSize="8.667"/>
+            <Label x:Name="label_Copy" Content="80" HorizontalAlignment="Right" Style="{DynamicResource SimpleLabel}" Margin="0,0,0,4.5" FontSize="8.667"/>
+            <Label x:Name="label_Copy1" Content="70" HorizontalAlignment="Right" Style="{DynamicResource SimpleLabel}" Margin="0,0,0,4.5" FontSize="8.667"/>
+            <Label x:Name="label_Copy2" Content="60" HorizontalAlignment="Right" Style="{DynamicResource SimpleLabel}" Margin="0,0,0,4.5" FontSize="8.667"/>
+            <Label x:Name="label_Copy3" Content="50" HorizontalAlignment="Right" Style="{DynamicResource SimpleLabel}" Margin="0,0,0,4.5" FontSize="8.667"/>
+            <Label x:Name="label_Copy4" Content="40" HorizontalAlignment="Right" Style="{DynamicResource SimpleLabel}" Margin="0,0,0,4.5" FontSize="8.667"/>
+            <Label x:Name="label_Copy5" Content="30" HorizontalAlignment="Right" Style="{DynamicResource SimpleLabel}" Margin="0,0,0,4.5" FontSize="8.667"/>
+            <Label x:Name="label_Copy6" Content="20" HorizontalAlignment="Right" Style="{DynamicResource SimpleLabel}" Margin="0,0,0,4.5" FontSize="8.667"/>
+            <Label x:Name="label_Copy7" Content="10" HorizontalAlignment="Right" Style="{DynamicResource SimpleLabel}" Margin="0,0,0,4.5" FontSize="8.667"/>
+            <Label x:Name="label_Copy8" Content="0" HorizontalAlignment="Right" Style="{DynamicResource SimpleLabel}" Margin="0,0,0,4.5" FontSize="8.667"/>
+        </StackPanel>
+        <Label x:Name="label1" Content="Gas:" HorizontalAlignment="Left" Margin="90,22.666,0,0" Style="{DynamicResource SimpleLabel}" VerticalAlignment="Top"/>
+        <Label x:Name="label1_Copy" Content="Light:" HorizontalAlignment="Left" Margin="90,96.665,0,88.093" Style="{DynamicResource SimpleLabel}" d:LayoutOverrides="Height"/>
+        <Label x:Name="label2" Content="Lamp:" HorizontalAlignment="Right" Margin="0,22.668,129.043,0" Style="{DynamicResource SimpleLabel}" VerticalAlignment="Top"/>
+        <Label x:Name="label3" Content="Alert:" HorizontalAlignment="Right" Margin="0,96.667,133.239,88.093" Style="{DynamicResource SimpleLabel}" d:LayoutOverrides="Height"/>
+        <Label x:Name="lblGas" Content="" HorizontalAlignment="Left" Margin="147.276,22.666,0,0" Style="{DynamicResource SimpleLabel}" VerticalAlignment="Top"/>
+        <Label x:Name="lblLight" Content="" HorizontalAlignment="Left" Margin="147.276,96.665,0,88.095" Style="{DynamicResource SimpleLabel}" d:LayoutOverrides="Height"/>
+        <RadioButton x:Name="rbLamp" Content="" HorizontalAlignment="Right" Margin="0,22.668,25.549,0" VerticalAlignment="Top" Height="58.407" Width="77.93" Style="{DynamicResource RadioButtonStyle1}" IsEnabled="False"/>
+        <RadioButton x:Name="rbAlert" Content="" HorizontalAlignment="Right" Margin="0,96.667,25.549,44.926" Width="77.93" Style="{DynamicResource RadioButtonStyle2}" IsEnabled="False"/>
     </Grid>
 </client:AbsDisplayControl>

@@ -25,7 +25,7 @@ namespace TechDemo.Server.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("FakeService1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("TempDect")]
         public string ClientAssemblyName {
             get {
                 return ((string)(this["ClientAssemblyName"]));
@@ -43,7 +43,7 @@ namespace TechDemo.Server.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("data source = D:\\Develop\\MultiPlatform\\TechDemo\\FakeService1\\Mock1.db")]
+        [global::System.Configuration.DefaultSettingValueAttribute("data source = D:\\Develop\\MultiPlatform\\TechDemo\\TempDect\\TempDect.db")]
         public string ConnectionString {
             get {
                 return ((string)(this["ConnectionString"]));
@@ -52,7 +52,7 @@ namespace TechDemo.Server.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("FakeService1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("TempDect")]
         public string ServerAssemblyName {
             get {
                 return ((string)(this["ServerAssemblyName"]));
@@ -61,7 +61,7 @@ namespace TechDemo.Server.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("This is an introduction from server...")]
+        [global::System.Configuration.DefaultSettingValueAttribute("This is an introduction from tempdect server...")]
         public string Introduction {
             get {
                 return ((string)(this["Introduction"]));
