@@ -7,33 +7,31 @@ using System.Text;
 using System.Threading.Tasks;
 using TechDemo.Interface.Client;
 
-namespace FakeService1
+namespace TempDect
 {
     public class DBContext : TechDemo.Interface.Server.AbsDBContext
     {
         private readonly object _lock = new object();
 
         public DBContext(DbConnection conn) : base(conn)
-        { }
+        {}
 
-        public DbSet<DataModel> DataModel { get; set; }
+        public DbSet<DataModel> DataModels { get; set; }
 
-        public override void AddData(TechDemo.Interface.Client.AbsDataModel data)
+        public override void AddData(AbsDataModel data)
         {
-            lock(_lock)
+            lock (_lock)
             {
-                DataModel.Add(data as DataModel);
+                DataModels.Add(data as DataModel);
             }
         }
 
         public override Task<int> SaveChangesAsync()
         {
-            Task<int> task;
             lock (_lock)
             {
-                task = base.SaveChangesAsync();
+                return base.SaveChangesAsync();
             }
-            return task;
         }
     }
 }

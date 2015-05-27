@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TechDemo.Interface.Server;
 
-namespace FakeService1
+namespace TempDect
 {
-    public class ServiceFactory : IServiceFactory
+    public class ServiceFactory : TechDemo.Interface.Server.IServiceFactory
     {
-        public TechDemo.Interface.Server.AbsDataService CreateService(int id, string str)
+        public AbsDataService CreateService(int id, string str)
         {
             return new DataService(id, str);
         }

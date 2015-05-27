@@ -14,10 +14,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TechDemo.Interface.Client;
 
-namespace FakeService1
+namespace TempDect
 {
     /// <summary>
-    /// DisplayControl.xaml 的交互逻辑
+    /// DataControl.xaml 的交互逻辑
     /// </summary>
     public partial class DisplayControl : AbsDisplayControl
     {
@@ -26,14 +26,9 @@ namespace FakeService1
             InitializeComponent();
         }
 
-        public override void PopulateData(TechDemo.Interface.Client.AbsDataModel data)
+        public override void PopulateData(AbsDataModel data)
         {
-            var dat = data as DataModel;
-            I.Text = dat.I.ToString();
-            II.Text = dat.II.ToString();
-            III.Text = dat.III.ToString();
-
-            ID.Text = dat.ServerID.ToString();
+            throw new NotImplementedException();
         }
     }
 }

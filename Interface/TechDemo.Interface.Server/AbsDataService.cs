@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TechDemo.Interface.Client;
 
 namespace TechDemo.Interface.Server
@@ -16,6 +12,7 @@ namespace TechDemo.Interface.Server
 
         public abstract event Action<AbsDataModel> DataArrived;
 
+        // ReSharper disable once InconsistentNaming
         protected int ID { get; private set; }
     }
 }
